@@ -528,64 +528,25 @@
 <button class="tab-btn" onclick="switchTab('policy')">交付及退費</button>
 </div>
 <!-- 分頁 1：【主頁】 -->
-<!-- 搜尋與篩選區域 -->
-<div class="card-box">
-    <div class="card-header">🔍 夥伴搜尋器</div>
-    
-    <!-- 地區選單 -->
-    <select id="regionSelect" onchange="filterPeople()" style="width:100%; padding:10px; border-radius:10px; margin-bottom:10px; background:#1a1a2e; color:#fff; border:1px solid #444;">
-        <option value="">請選擇地區</option>
-        <option value="北部">北部</option>
-        <option value="中部">中部</option>
-        <option value="南部">南部</option>
-    </select>
-
-    <!-- 名單選單 (自動生成) -->
-    <select id="nameSelect" onchange="showProfile()" style="width:100%; padding:10px; border-radius:10px; margin-bottom:10px; background:#1a1a2e; color:#fff; border:1px solid #444;">
-        <option value="">請先選擇地區</option>
-    </select>
-
-    <!-- 自介顯示區 -->
-    <div id="profileDisplay" style="margin-top:20px; padding:15px; border-top:1px solid #333; display:none;">
-        <h3 id="displayName" style="color:var(--neon-gold);"></h3>
-        <p id="displayDesc" style="color:#ccc; font-size:14px; margin-top:10px;"></p>
-    </div>
-</div>
-
-<script>
-    // https://docs.google.com/spreadsheets/d/e/2PACX-1vQA2wfE0VWKbM4ni_v62ASa0HO1-9-_-KHi09Eqa25SXAJB0_MLfyzHPgwbrnhVeHlTSJFTBQ99uJf7/pub?output=csv
-    const csvUrl = 'YOUR_GOOGLE_SHEET_CSV_URL'; 
-    let partnerData = [];
-
-    // 讀取資料
-    fetch(csvUrl)
-        .then(res => res.text())
-        .then(csv => {
-            // 解析 CSV 邏輯 (簡單處理)
-            const rows = csv.split('\n').slice(1);
-            partnerData = rows.map(row => {
-                const [name, region, desc] = row.split(',');
-                return { name, region, desc };
-            });
-        });
-
-    function filterPeople() {
-        const region = document.getElementById('regionSelect').value;
-        const nameSelect = document.getElementById('nameSelect');
-        nameSelect.innerHTML = '<option value="">請選擇人員</option>';
-        
-        partnerData.filter(p => p.region === region).forEach(p => {
-            nameSelect.innerHTML += `<option value="${p.name}">${p.name}</option>`;
-        });
-    }
-
-    function showProfile() {
-        const name = document.getElementById('nameSelect').value;
-        const person = partnerData.find(p => p.name === name);
-        if (person) {
-            document.getElementById('displayName').innerText = person.name;
-            document.getElementById('displayDesc').innerText = person.desc;
-            document.getElementById('profileDisplay').style.display = 'block';
+<div class="tab-panel active" id="panel-home">
+        <!-- 夥伴搜尋器 -->
+        <div class="card-box">
+            <div class="card-header">🔍 夥伴搜尋器</div>
+            <select id="regionSelect" onchange="filterPeople()" style="width:100%; padding:10px; border-radius:10px; margin-bottom:10px; background:#1a1a2e; color:#fff; border:1px solid #444;">
+                <option value="">請選擇地區</option>
+                <option value="全台">全台</option>
+                <option value="北部">北部</option>
+                <option value="中部">中部</option>
+                <option value="南部">南部</option>
+            </select>
+            <select id="nameSelect" onchange="showProfile()" style="width:100%; padding:10px; border-radius:10px; margin-bottom:10px; background:#1a1a2e; color:#fff; border:1px solid #444;">
+                <option value="">請先選擇地區</option>
+            </select>
+            <div id="profileDisplay" style="margin-top:20px; padding:15px; border-top:1px solid #333; display:none;">
+                <h3 id="displayName" style="color:var(--neon-gold);"></h3>
+                <p id="displayDesc" style="color:#ccc; font-size:14px; margin-top:10px;"></p>
+            </div>
+        </div>
         }
     }
 </script>

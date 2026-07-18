@@ -384,64 +384,55 @@
 </div>
 </div>
 <!-- 分頁 3：【主要公告】 -->
-<!-- 分頁 3：【主要公告與身分規範】 -->
+<!-- 分頁 3：【身分專屬規範與法律條款】 -->
 <div class="tab-panel" id="panel-notice">
     <div class="card-box">
-        <div class="card-header">📢 平台公告與身分規範</div>
+        <div class="card-header">⚖️ 平台條款與身分規範</div>
         
-        <!-- 導航切換 (三欄位) -->
         <div class="sub-tab-navigation">
-            <button class="sub-tab-btn active" onclick="switchSubTab('sub-common')">🌐 共同</button>
-            <button class="sub-tab-btn" onclick="switchSubTab('sub-client')">👤 客戶</button>
-            <button class="sub-tab-btn" onclick="switchSubTab('sub-partner')">👥 夥伴</button>
+            <button class="sub-tab-btn active" onclick="switchSubTab('sub-terms')">📋 法律免責</button>
+            <button class="sub-tab-btn" onclick="switchSubTab('sub-client')">👤 求租人</button>
+            <button class="sub-tab-btn" onclick="switchSubTab('sub-partner')">👥 出租人</button>
         </div>
 
-        <!-- 1. 共同規範 -->
-        <div class="sub-tab-panel active" id="sub-panel-sub-common">
+        <!-- 1. 法律免責與免責聲明 (保護平台) -->
+        <div class="sub-tab-panel active" id="sub-panel-sub-terms">
             <div class="policy-list">
                 <div class="policy-item notice-cyan">
-                    <div class="policy-item-title">💳 金流與隱私安全</div>
-                    <div class="policy-item-desc">• 平台使用官方特約商家金流（非私人帳號），資金全程信託管理。<br>• 會議室分流使用時，請留意 LINE 原生機制會顯示真實名稱與頭像。</div>
+                    <div class="policy-item-title">⚠️ 服務條款免責聲明</div>
+                    <div class="policy-item-desc">本平台為資訊媒合性質。若使用者透過第三方工具（如 LINE 會議室）自行揭露隱私、個資，或因個人行為導致之損害，平台僅負媒合責任，概不承擔賠償義務。</div>
                 </div>
                 <div class="policy-item notice-blue">
-                    <div class="policy-item-title">⚖️ 平台紅線公約</div>
-                    <div class="policy-item-desc">嚴禁肢體接觸、車內禁菸、言語羞辱或騷擾行為。違者立即終止服務並沒收費用。</div>
+                    <div class="policy-item-title">🛡️ 爭議審核機制</div>
+                    <div class="policy-item-desc">遇服務糾紛，本平台將依據雙方提供之客觀事證（如紀錄截圖、回報回條）進行事實釐清。平台對違規行為之認定保有最終決定權。</div>
                 </div>
             </div>
         </div>
 
-        <!-- 2. 求租人（客戶） -->
+        <!-- 2. 求租人（客戶）權益 -->
         <div class="sub-tab-panel" id="sub-panel-sub-client">
             <div class="policy-list">
-                <div class="policy-item notice-blue">
-                    <div class="policy-item-title">💳 付款規範</div>
-                    <div class="policy-item-desc">線上全額預付；線下服務則於預訂後支付 30% 定金，餘款 70% 現場付現。</div>
-                </div>
                 <div class="policy-item notice-pink">
-                    <div class="policy-item-title">❌ 取消與放鳥</div>
-                    <div class="policy-item-desc">7 天內臨退/放鳥，平台將扣除總額 30% 作為違約金，其中 10% 用於補償服務方。</div>
+                    <div class="policy-item-title">❌ 取消與損害賠償</div>
+                    <div class="policy-item-desc">7 天內臨退/放鳥，平台將扣除總額 30% 作為違約金，此金額用於彌補平台之行政成本及夥伴時間損耗。</div>
                 </div>
                 <div class="policy-item notice-cyan">
-                    <div class="policy-item-title">🔥 爽約保障方案</div>
-                    <div class="policy-item-desc">若夥伴惡意爽約，平台全額退還定金，並額外補償 $500 作為您的誠信損失賠償。</div>
+                    <div class="policy-item-title">🔥 爽約保障金</div>
+                    <div class="policy-item-desc">經審核確認夥伴惡意爽約，平台將全額退定金，並額外撥發 $500 失約補償金，維護您的消費權益。</div>
                 </div>
             </div>
         </div>
 
-        <!-- 3. 出租人（夥伴） -->
+        <!-- 3. 出租人（夥伴）規則 -->
         <div class="sub-tab-panel" id="sub-panel-sub-partner">
             <div class="policy-list">
                 <div class="policy-item notice-cyan">
-                    <div class="policy-item-title">💰 誠信保證金制</div>
-                    <div class="policy-item-desc">接單門檻 $1,000。若惡意違約（放鳥），將沒收保證金（$500 賠客、$500 補平台）並永久停權。</div>
-                </div>
-                <div class="policy-item notice-blue">
-                    <div class="policy-item-title">📈 拆帳結算</div>
-                    <div class="policy-item-desc">平台抽成 20%。以 $1,000 訂單為例：收到定金 $300，平台扣 $200，退夥伴 $100，現場實收 $700。</div>
+                    <div class="policy-item-title">💰 誠信保證金</div>
+                    <div class="policy-item-desc">接單須維持 $1,000 保證金。惡意違約（放鳥）將沒收保證金（$500 賠客、$500 補平台），違約事實確鑿者予以停權。</div>
                 </div>
                 <div class="policy-item notice-pink">
-                    <div class="policy-item-title">🛡️ 被客戶放鳥保障</div>
-                    <div class="policy-item-desc">客戶於 7 天內放鳥，在夥伴無違規前提下，可獲定金總額 10% 的補償，次月隨款項撥付。</div>
+                    <div class="policy-item-title">🛡️ 權益補償</div>
+                    <div class="policy-item-desc">客戶 7 天內放鳥，於確認無誤後，您可獲該單總定金之 10% 作為時間補償。</div>
                 </div>
             </div>
         </div>

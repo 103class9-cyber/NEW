@@ -169,14 +169,13 @@
     .room-item:hover, .room-item:active { background: linear-gradient(135deg, rgba(179, 102, 255, 0.3) 0%, rgba(255, 115, 36, 0.2) 100%); border-color: var(--neon-orange); color: #ffffff; transform: translateY(-5px) scale(1.06); box-shadow: 0 6px 20px rgba(255, 115, 36, 0.35); }
     .room-item:hover span { color: #ffd2ba; }
 
-    /* 招待所房間滿房樣式 (>=4人) */
     .room-item.busy {
         border-color: var(--neon-pink) !important;
         background: linear-gradient(135deg, rgba(255, 42, 109, 0.15) 0%, rgba(12, 6, 20, 0.8) 100%) !important;
         box-shadow: 0 0 15px rgba(255, 42, 109, 0.25) !important;
         position: relative;
         opacity: 1;
-        pointer-events: auto !important; /* 強制開啟點擊 */
+        pointer-events: auto !important;
     }
     .room-item.busy::after {
         content: '● BUSY';
@@ -188,14 +187,13 @@
         text-shadow: 0 0 5px var(--neon-pink);
         letter-spacing: 0.5px;
         animation: flashGlow 1.5s infinite alternate;
-        pointer-events: none; /* 標籤不阻擋點擊 */
+        pointer-events: none;
     }
 
     .talk-list { display: flex; flex-direction: column; gap: 14px; }
     .talk-item { display: flex; align-items: center; padding: 20px 24px; background: linear-gradient(90deg, rgba(179, 102, 255, 0.02) 0%, rgba(255, 255, 255, 0.003) 100%); border: 1px solid rgba(179, 102, 255, 0.1); border-left: 3px solid rgba(179, 102, 255, 0.32); border-radius: 18px; color: #ffffff; text-decoration: none; transition: var(--ease-premium) 0.4s; }
     .talk-item:hover, .talk-item:active { border-color: var(--neon-purple); border-left-color: var(--neon-cyan); background: linear-gradient(90deg, rgba(179, 102, 255, 0.16) 0%, rgba(0, 240, 255, 0.04) 100%); transform: translateX(6px); box-shadow: 0 5px 20px rgba(179, 102, 255, 0.22); }
 
-    /* Live Chat 尊榮對談室有人使用的發光視覺 (>=1人) */
     .talk-item.busy {
         border-color: var(--neon-pink) !important;
         border-left-color: var(--neon-pink) !important;
@@ -203,7 +201,7 @@
         box-shadow: 0 0 15px rgba(255, 42, 109, 0.25) !important;
         position: relative;
         opacity: 1;
-        pointer-events: auto !important; /* 強制開啟點擊 */
+        pointer-events: auto !important;
     }
     .talk-item.busy::after {
         content: '● BUSY';
@@ -214,7 +212,7 @@
         letter-spacing: 0.5px;
         animation: flashGlow 1.5s infinite alternate;
         margin-left: auto;
-        pointer-events: none; /* 標籤不阻擋點擊 */
+        pointer-events: none;
     }
     .talk-item.busy .talk-arrow { display: none !important; }
 
@@ -267,10 +265,6 @@
 <!-- 分頁 1：【主頁】 -->
 <div class="tab-panel active" id="panel-home">
 <div class="card-box">
-<div class="card-header">🔍 搜尋時光分享者</div>
-<iframe src="https://script.google.com/macros/s/AKfycbwomRFSHOCMeKJthbGnh1w0Wd17Maws76DMRLIxaUpVOf-k_OJyh5DRYOmQbWhhuqARdw/exec" style="width: 100%; height: 350px; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; background: rgba(0,0,0,0.2);">
-</iframe>
-</div>
 <div class="card-header">🏢 核心功能社群</div>
 <a class="link-card match-card" href="https://line.me/ti/g2/HjSXyaP1srrEd-vHV9h9uxaHtc4Q-NC4Z3VsXg?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" target="_blank">
 <div class="link-icon">🤝</div>
@@ -422,8 +416,8 @@
 <div class="card-box sub-notice-box">
 <div class="policy-list">
 <div class="policy-item notice-blue">
-<div class="policy-item-title">🛡️ 7月17日起全新 ➔ 雙向誠信保障新制</div>
-<div class="policy-item-desc">為了全面落實雙向誠信，向高消費客群展現平台特約夥伴的極致出勤率：自 7 月 17 日起，訂單確認成立後，時光分享者預存該筆訂單金額之 30% 作為「特約個體戶誠信履約保證金」，行程完成結案後，系統將立即全額退還。本制度與尋茶人的「放鳥扣款制」相互對稱，時光分享者仍保有 100% 自由決定是否接單之絕對自主權。</div>
+<div class="policy-item-title">🛡️ 8月1日起全新 ➔ 雙向誠信保障新制</div>
+<div class="policy-item-desc">為了落實雙向誠信，我們提供更彈性的保障制度。自 8 月 1 日起，尋茶人可自主選擇是否啟用「雙向誠信保障」。若尋茶人選擇啟用該保障，訂單確認後，時光分享者需預存該筆訂單金額之 30% 作為「特約個體戶誠信履約保證金」。行程順利結案後，保證金將會同次月撥款時一併歸還予夥伴。此制度與尋茶人的「放鳥扣款制」相對應，時光分享者仍擁有 100% 接單自主權。</div>
 </div>
 <div class="policy-item notice-pink">
 <div class="policy-item-title">❌ 尋茶人主動取消拆帳法</div>
@@ -500,7 +494,7 @@
 </div>
 </div>
 <div class="footer">© 2026 閒人案內所 ｜ 頂級生活陪伴體驗</div>
-
+</div>
 <script>
     let isUnlocked = false;
     function switchTab(tabId) {

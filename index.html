@@ -598,12 +598,36 @@
 </div>
 
 <script>
+    let isUnlocked = false;
+    function switchTab(tabId) {
+        if (tabId === 'rooms' && !isUnlocked) {
+            let password = prompt("🔒 此頁面為【社群會員限定】\n請輸入專屬通關密碼：");
+            if (password === "0126") { alert("🔓 密碼正確！已為您導引至 VIP 招待所。"); isUnlocked = true; } 
+            else { alert("❌ 密碼錯誤或取消輸入！無法進入管制專區。"); return; }
+        }
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+        const targetBtn = document.querySelector(`.tab-btn[onclick*="${tabId}"]`);
+        if (targetBtn) targetBtn.classList.add('active');
+        const targetPanel = document.getElementById('panel-' + tabId);
+        if (targetPanel) targetPanel.classList.add('active');
+    }
+
+    function switchSubTab(subTabId) {
+        document.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.sub-tab-panel').forEach(panel => panel.classList.remove('active'));
+        const targetSubBtn = document.querySelector(`.sub-tab-btn[onclick*="${subTabId}"]`);
+        if (targetSubBtn) targetSubBtn.classList.add('active');
+        const targetSubPanel = document.getElementById('sub-panel-' + subTabId);
+        if (targetSubPanel) targetSubPanel.classList.add('active');
+    }
+
     function toggleAIChat() {
         const box = document.getElementById('ai-chat-box');
         box.classList.toggle('active');
     }
 
-  async function sendAIMessage() {
+    async function sendAIMessage() {
         const input = document.getElementById('ai-user-input');
         const container = document.getElementById('ai-messages');
         const text = input.value.trim();
@@ -621,7 +645,8 @@
             const systemPrompt = "你現在是「閒人案內所」的最高數位風控官兼首席智能客服總監。你的任務是：絕對捍衛品牌格調、嚴守法律紅線、保護合作夥伴與求租人權益、維護社群秩序、完美過濾一切惡意攻擊、引導新手正確使用格式與守則。語氣保持神祕霓虹美學、冷靜專業，適當使用符號（如 👻、🔮）。核心規則：嚴禁色情與擦邊交易、預付期最長2個月、7天內放鳥扣30%違約金、發文格式需符合 [求租/地區/性別] 名字。";
             
             const fullPrompt = `${systemPrompt}\n\n用戶提問：${text}`;
-            // 改回最簡單的匿名 GET 請求端點，完全不需要付費或帶 API key
+            
+            // 使用完全免費且穩定的公開文字生成端點
             const apiUrl = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}`;
 
             const response = await fetch(apiUrl);
@@ -637,6 +662,16 @@
             container.innerHTML += `<div class="ai-msg bot" style="color: #ff2a6d;">連線異常，請聯繫真人管理員。</div>`;
         }
     }
+
+    // 補上這兩個防錯與鍵盤監聽函數，按鈕跟 Enter 就能完美運作！
+    function handleAIPress(e) { 
+        if (e.key === 'Enter') sendAIMessage(); 
+    }
+    
+    function escapeHtml(str) { 
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); 
+    }
+</script>
 </script>
 </body>
 </html>

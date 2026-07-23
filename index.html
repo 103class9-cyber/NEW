@@ -599,11 +599,17 @@
 
 <script>
     let isUnlocked = false;
+
     function switchTab(tabId) {
         if (tabId === 'rooms' && !isUnlocked) {
             let password = prompt("🔒 此頁面為【社群會員限定】\n請輸入專屬通關密碼：");
-            if (password === "0126") { alert("🔓 密碼正確！已為您導引至 VIP 招待所。"); isUnlocked = true; } 
-            else { alert("❌ 密碼錯誤或取消輸入！無法進入管制專區。"); return; }
+            if (password === "0126") { 
+                alert("🔓 密碼正確！已為您導引至 VIP 招待所。"); 
+                isUnlocked = true; 
+            } else { 
+                alert("❌ 密碼錯誤或取消輸入！無法進入管制專區。"); 
+                return; 
+            }
         }
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
@@ -662,7 +668,9 @@
     }
 
     function handleAIPress(e) { 
-        if (e.key === 'Enter') sendAIMessage(); 
+        if (e.key === 'Enter') {
+            sendAIMessage();
+        }
     }
     
     function escapeHtml(str) { 

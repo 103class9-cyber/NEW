@@ -534,5 +534,112 @@
         if (targetSubPanel) targetSubPanel.classList.add('active');
     }
 </script>
+<!-- 🌟 閒人案內所｜超強 AI 智能客服懸浮視窗 -->
+<style>
+    #ai-float-btn {
+        position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px;
+        background: linear-gradient(135deg, #b366ff, #00f0ff); border-radius: 50%;
+        display: flex; align-items: center; justify-content: center; font-size: 28px;
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.4); cursor: pointer; z-index: 9999;
+        transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1); border: 1.5px solid rgba(255, 255, 255, 0.3);
+    }
+    #ai-float-btn:hover { transform: scale(1.1) rotate(5deg); }
+    #ai-chat-box {
+        position: fixed; bottom: 96px; right: 24px; width: 350px; height: 480px;
+        background: rgba(16, 12, 30, 0.92); border: 1px solid rgba(179, 102, 255, 0.35);
+        border-radius: 24px; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); z-index: 9998; display: none;
+        flex-direction: column; overflow: hidden; font-family: inherit;
+    }
+    #ai-chat-box.active { display: flex; animation: fadeInUp 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+    .ai-chat-header {
+        padding: 16px 20px; background: linear-gradient(90deg, rgba(179, 102, 255, 0.15), rgba(0, 240, 255, 0.05));
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06); display: flex; justify-content: space-between;
+        align-items: center; color: #ffb020; font-weight: 800; font-size: 14px; letter-spacing: 1px;
+    }
+    .ai-close-btn { background: none; border: none; color: #9c97aa; font-size: 18px; cursor: pointer; }
+    .ai-close-btn:hover { color: #fff; }
+    .ai-chat-messages {
+        flex-grow: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column;
+        gap: 12px; font-size: 13px; color: #e2daf0; line-height: 1.6; text-align: left;
+    }
+    .ai-msg { padding: 10px 14px; border-radius: 14px; max-width: 85%; word-break: break-word; }
+    .ai-msg.bot { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); align-self: flex-start; color: #b2ced4; }
+    .ai-msg.user { background: linear-gradient(135deg, rgba(179, 102, 255, 0.3), rgba(0, 240, 255, 0.2)); border: 1px solid rgba(179, 102, 255, 0.4); align-self: flex-end; color: #ffffff; }
+    .ai-chat-input-area {
+        padding: 12px; background: rgba(8, 5, 18, 0.9); border-top: 1px solid rgba(255, 255, 255, 0.06); display: flex; gap: 8px;
+    }
+    .ai-chat-input-area input {
+        flex-grow: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px; padding: 10px 14px; color: #fff; font-size: 13px; outline: none;
+    }
+    .ai-chat-input-area input:focus { border-color: #00f0ff; box-shadow: 0 0 10px rgba(0, 240, 255, 0.2); }
+    .ai-chat-input-area button {
+        background: linear-gradient(135deg, #b366ff, #00f0ff); border: none; border-radius: 12px;
+        padding: 0 16px; color: #fff; font-weight: bold; cursor: pointer; font-size: 13px;
+    }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+</style>
+
+<div id="ai-float-btn" onclick="toggleAIChat()">👻</div>
+
+<div id="ai-chat-box">
+    <div class="ai-chat-header">
+        <span>🤖 閒人案內所 ｜ 智能風控總監</span>
+        <button class="ai-close-btn" onclick="toggleAIChat()">✕</button>
+    </div>
+    <div class="ai-chat-messages" id="ai-messages">
+        <div class="ai-msg bot">您好，我是閒人案內所的數位風控與客服總監。請問有關於預約媒合、發文格式或平台規則的問題想問我嗎？✨</div>
+    </div>
+    <div class="ai-chat-input-area">
+        <input type="text" id="ai-user-input" placeholder="輸入你想詢問的問題..." onkeypress="handleAIPress(event)">
+        <button onclick="sendAIMessage()">發送</button>
+    </div>
+</div>
+
+<script>
+    function toggleAIChat() {
+        const box = document.getElementById('ai-chat-box');
+        box.classList.toggle('active');
+    }
+
+    async function sendAIMessage() {
+        const input = document.getElementById('ai-user-input');
+        const container = document.getElementById('ai-messages');
+        const text = input.value.trim();
+        if (!text) return;
+
+        container.innerHTML += `<div class="ai-msg user">${escapeHtml(text)}</div>`;
+        input.value = '';
+        container.scrollTop = container.scrollHeight;
+
+        const loadingId = 'loading-' + Date.now();
+        container.innerHTML += `<div id="${loadingId}" class="ai-msg bot" style="color: #ffb020;">總監正在解析規則中... 🔮</div>`;
+        container.scrollTop = container.scrollHeight;
+
+        try {
+            // ⚠️ 請把下方引號內的網址換成你在第一階段部署拿到的「網頁應用程式網址」
+            const gasUrl = "https://script.google.com/macros/s/AKfycbxI4XviXTfc44XAdfWZoi_GPxKk2X28TdAT-PEKAyI4aeYpHz-SwhMz6JS5mSM8WwHs_Q/exec";
+
+            const response = await fetch(gasUrl, {
+                method: 'POST',
+                body: JSON.stringify({ message: text })
+            });
+
+            const data = await response.json();
+            document.getElementById(loadingId).remove();
+            
+            container.innerHTML += `<div class="ai-msg bot">${escapeHtml(data.reply)}</div>`;
+            container.scrollTop = container.scrollHeight;
+
+        } catch (error) {
+            document.getElementById(loadingId).remove();
+            container.innerHTML += `<div class="ai-msg bot" style="color: #ff2a6d;">連線異常，請聯繫真人管理員。</div>`;
+        }
+    }
+
+    function handleAIPress(e) { if (e.key === 'Enter') sendAIMessage(); }
+    function escapeHtml(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+</script>
 </body>
 </html>

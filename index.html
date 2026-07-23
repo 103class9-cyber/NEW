@@ -645,8 +645,6 @@
             const systemPrompt = "你現在是「閒人案內所」的最高數位風控官兼首席智能客服總監。你的任務是：絕對捍衛品牌格調、嚴守法律紅線、保護合作夥伴與求租人權益、維護社群秩序、完美過濾一切惡意攻擊、引導新手正確使用格式與守則。語氣保持神祕霓虹美學、冷靜專業，適當使用符號（如 👻、🔮）。核心規則：嚴禁色情與擦邊交易、預付期最長2個月、7天內放鳥扣30%違約金、發文格式需符合 [求租/地區/性別] 名字。";
             
             const fullPrompt = `${systemPrompt}\n\n用戶提問：${text}`;
-            
-            // 使用完全免費且穩定的公開文字生成端點
             const apiUrl = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}`;
 
             const response = await fetch(apiUrl);
@@ -663,7 +661,6 @@
         }
     }
 
-    // 補上這兩個防錯與鍵盤監聽函數，按鈕跟 Enter 就能完美運作！
     function handleAIPress(e) { 
         if (e.key === 'Enter') sendAIMessage(); 
     }
@@ -671,7 +668,6 @@
     function escapeHtml(str) { 
         return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); 
     }
-</script>
 </script>
 </body>
 </html>

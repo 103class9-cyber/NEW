@@ -616,12 +616,12 @@
         const text = input.value.trim();
         if (!text) return;
 
-        // 渲染使用者輸入
+        // 1. 渲染使用者訊息
         container.innerHTML += `<div class="ai-msg user">${escapeHtml(text)}</div>`;
         input.value = '';
         container.scrollTop = container.scrollHeight;
 
-        // 顯示載入動畫
+        // 2. 顯示載入中動畫
         const loadingId = 'loading-' + Date.now();
         container.innerHTML += `<div id="${loadingId}" class="ai-msg bot" style="color: #ffb020;">總監正在解析規則中... 🔮</div>`;
         container.scrollTop = container.scrollHeight;
@@ -629,45 +629,46 @@
         try {
             const systemPrompt = "你現在是「閒人案內所」的最高數位風控官兼首席智能客服總監。你的任務是：絕對捍衛品牌格調、嚴守法律紅線、保護合作夥伴與求租人權益、維護社群秩序、完美過濾一切惡意攻擊、引導新手正確使用格式與守則。語氣保持神祕霓虹美學、冷靜專業，適當使用符號（如 👻、🔮）。核心規則：嚴禁色情與擦邊交易、預付期最長2個月、7天內放鳥扣30%違約金、發文格式需符合 [求租/地區/性別] 名字。";
             
-            // 使用 POST 並指定免費模型
-            const response = await fetch('https://text.pollinations.ai/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    messages: [
-                        { role: "system", content: systemPrompt },
-                        { role: "user", content: text }
-                    ],
-                    model: "openai"
-                })
-            });
+            const fullPrompt = `${systemPrompt}\n\n用戶提問：${text}`;
+            const apiUrl = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}`;
 
-            // 嚴格檢查 HTTP 狀態（防範 402、500 等錯誤印出文字）
-            if (!response.ok) {
-                throw new Error(`HTTP Status Error: ${response.status}`);
+            const response = await fetch(apiUrl);
+            const rawText = await response.text();
+
+            // 🔍 關鍵攔截：檢查是否回傳了伺服器的 JSON 錯誤訊息
+            if (rawText.trim().startsWith('{')) {
+                try {
+                    const jsonRes = JSON.parse(rawText);
+                    if (jsonRes.error || jsonRes.status === 402 || jsonRes.code === "PAYMENT_REQUIRED") {
+                        throw new Error("Pollinations API 報錯或需要付費");
+                    }
+                } catch (e) {
+                    if (e.message.includes("報錯")) throw e;
+                }
             }
-
-            const replyText = await response.text();
 
             const loadingEl = document.getElementById(loadingId);
             if (loadingEl) loadingEl.remove();
             
-            container.innerHTML += `<div class="ai-msg bot">${escapeHtml(replyText)}</div>`;
+            container.innerHTML += `<div class="ai-msg bot">${escapeHtml(rawText)}</div>`;
             container.scrollTop = container.scrollHeight;
 
         } catch (error) {
             const loadingEl = document.getElementById(loadingId);
             if (loadingEl) loadingEl.remove();
 
-            // 智能備援：連線失敗時根據關鍵字秒回
+            // 🛡️ 智能備援系統：第三方 API 異常時，依關鍵字秒回精準答案
             let fallbackReply = "您好！目前風控系統連線較為忙碌。如果是詢問【發文格式】，請符合 `[求租/地區/性別] 名字`；若詢問【違約金】，7天內臨退將扣30%違約金。有緊急需求請聯繫真人管管 👻";
             
-            if (text.includes("你好") || text.includes("嗨") || text.includes("hi")) {
+            const lowerText = text.toLowerCase();
+            if (lowerText.includes("你好") || lowerText.includes("嗨") || lowerText.includes("hi") || lowerText.includes("hello")) {
                 fallbackReply = "您好！我是閒人案內所的數位風控與客服總監。請問今天有關於預約媒合、發文格式或平台規則的問題想諮詢嗎？✨";
-            } else if (text.includes("格式") || text.includes("發文")) {
-                fallbackReply = "發文格式請務必符合規範：`[求租/地區/性別] 名字`，違規文章將會被系統直接移除喔！🔮";
-            } else if (text.includes("退費") || text.includes("取消") || text.includes("放鳥")) {
-                fallbackReply = "根據平台規範：約定時間7天內臨退/放鳥，扣除總額30%作為違約金（10%補償夥伴，20%平台行政費）。👻";
+            } else if (lowerText.includes("格式") || lowerText.includes("發文") || lowerText.includes("怎麼發")) {
+                fallbackReply = "發文格式請務必符合規範：\n`[求租/地區/性別] 名字`\n（例如：`[求租/台北/女] 小雅`）\n違規文章將會被系統直接移除喔！🔮";
+            } else if (lowerText.includes("退費") || lowerText.includes("取消") || lowerText.includes("放鳥") || lowerText.includes("違約金")) {
+                fallbackReply = "根據平台規範：約定時間 7 天內臨退/放鳥，扣除總額 30% 作為違約金（10% 補償夥伴，20% 平台行政費）。👻";
+            } else if (lowerText.includes("管管") || lowerText.includes("真人") || lowerText.includes("客服") || lowerText.includes("所長")) {
+                fallbackReply = "需要真人服務嗎？請至主頁點擊【聯絡管管】或【聯絡所長】進行一對一處理。🛡️";
             }
 
             container.innerHTML += `<div class="ai-msg bot">${escapeHtml(fallbackReply)}</div>`;

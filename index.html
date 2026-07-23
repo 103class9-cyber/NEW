@@ -636,6 +636,8 @@
     async function sendAIMessage() {
         const input = document.getElementById('ai-user-input');
         const container = document.getElementById('ai-messages');
+        if (!input) return;
+        
         const text = input.value.trim();
         if (!text) return;
 
@@ -656,26 +658,41 @@
             const response = await fetch(apiUrl);
             const replyText = await response.text();
 
-            document.getElementById(loadingId).remove();
+            const loadingEl = document.getElementById(loadingId);
+            if (loadingEl) loadingEl.remove();
             
             container.innerHTML += `<div class="ai-msg bot">${escapeHtml(replyText)}</div>`;
             container.scrollTop = container.scrollHeight;
 
         } catch (error) {
-            document.getElementById(loadingId).remove();
+            const loadingEl = document.getElementById(loadingId);
+            if (loadingEl) loadingEl.remove();
             container.innerHTML += `<div class="ai-msg bot" style="color: #ff2a6d;">連線異常，請聯繫真人管理員。</div>`;
         }
     }
 
-    function handleAIPress(e) { 
-        if (e.key === 'Enter') {
-            sendAIMessage();
-        }
-    }
-    
     function escapeHtml(str) { 
         return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); 
     }
+
+    // 自動綁定發送按鈕與 Enter 鍵事件（確保絕對點得動、按得出）
+    document.addEventListener('DOMContentLoaded', () => {
+        const sendBtn = document.getElementById('ai-send-btn');
+        const userInput = document.getElementById('ai-user-input');
+
+        if (sendBtn) {
+            sendBtn.addEventListener('click', sendAIMessage);
+        }
+
+        if (userInput) {
+            userInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendAIMessage();
+                }
+            });
+        }
+    });
 </script>
 </body>
 </html>

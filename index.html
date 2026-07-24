@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="zh-TW">
 <head>
 <meta charset="utf-8"/>
@@ -217,7 +216,103 @@
     .tab-panel.active { display: block; animation: fadeIn 0.5s var(--ease-premium) forwards; }
     .sub-tab-panel.active { display: block; animation: fadeInSub 0.4s var(--ease-premium) forwards; }
 
-    /* AI 智能風控總監 UI 優化區塊 */
+    /* 🌟 出租人 (時光夥伴) 卡片專屬樣式 */
+    .partner-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 10px;
+    }
+
+    .partner-card {
+        background: rgba(16, 12, 30, 0.82);
+        border: 1px solid rgba(179, 102, 255, 0.22);
+        border-radius: 22px;
+        padding: 20px 18px;
+        text-align: left;
+        position: relative;
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .partner-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--neon-cyan);
+        box-shadow: 0 12px 30px rgba(0, 240, 255, 0.25);
+    }
+
+    .partner-header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+
+    .partner-name {
+        font-size: 18px;
+        font-weight: 800;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .partner-gender-badge {
+        font-size: 10px;
+        padding: 2px 7px;
+        border-radius: 12px;
+        font-weight: 800;
+    }
+    .partner-gender-badge.female { background: rgba(255, 42, 109, 0.15); color: var(--neon-pink); border: 1px solid rgba(255, 42, 109, 0.3); }
+    .partner-gender-badge.male { background: rgba(0, 240, 255, 0.15); color: var(--neon-cyan); border: 1px solid rgba(0, 240, 255, 0.3); }
+
+    .partner-region {
+        font-size: 12px;
+        color: var(--neon-gold);
+        font-weight: 700;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .partner-bio {
+        font-size: 13px;
+        color: #c7c0db;
+        line-height: 1.65;
+        margin-bottom: 16px;
+        background: rgba(255, 255, 255, 0.02);
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        word-break: break-word;
+    }
+
+    .partner-btn {
+        width: 100%;
+        padding: 10px 0;
+        background: linear-gradient(135deg, rgba(179, 102, 255, 0.25), rgba(0, 240, 255, 0.18));
+        border: 1px solid var(--neon-purple);
+        border-radius: 14px;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        display: block;
+        transition: 0.3s;
+    }
+
+    .partner-btn:hover {
+        background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    }
+
+    /* AI 智能風控總監 UI 樣式 */
     #ai-float-btn {
         position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px;
         background: linear-gradient(135deg, #b366ff, #00f0ff); border-radius: 50%;
@@ -255,7 +350,6 @@
     .ai-msg.bot { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); align-self: flex-start; color: #b2ced4; }
     .ai-msg.user { background: linear-gradient(135deg, rgba(179, 102, 255, 0.3), rgba(0, 240, 255, 0.2)); border: 1px solid rgba(179, 102, 255, 0.4); align-self: flex-end; color: #ffffff; }
     
-    /* 點擊式按鈕卡片與連結樣式 */
     .chat-link-btn {
         display: inline-block; margin-top: 6px; padding: 6px 12px; background: rgba(0, 240, 255, 0.15);
         border: 1px solid #00f0ff; color: #00f0ff; border-radius: 10px; text-decoration: none;
@@ -313,14 +407,28 @@
 <h1 class="title">閒人案內所</h1>
 <p class="subtitle">VIP Lounge Portal</p>
 </div>
+
+<!-- 🌟 頂部分頁選單 -->
 <div class="tab-navigation">
 <button class="tab-btn active" onclick="switchTab('home')">主頁</button>
 <button class="tab-btn" onclick="switchTab('rooms')">VIP 招待所</button>
 <button class="tab-btn" onclick="switchTab('notice')">主要公告</button>
 <button class="tab-btn" onclick="switchTab('policy')">交付及退費</button>
 </div>
+
 <!-- 分頁 1：【主頁】 -->
 <div class="tab-panel active" id="panel-home">
+
+<!-- 🌟【最上方】時光夥伴 / 出租人名單（動態同步自 Google Sheet） -->
+<div class="card-box">
+<div class="card-header">👥 時光夥伴 ｜ 出租人名單</div>
+<div class="partner-grid" id="partner-grid">
+<div style="color: var(--neon-gold); text-align: center; width: 100%; padding: 20px;">
+    正在同步最新出租人資料中... 🔮
+</div>
+</div>
+</div>
+
 <div class="card-box">
 <div class="card-header">🏢 核心功能社群</div>
 <a class="link-card match-card" href="https://line.me/ti/g2/HjSXyaP1srrEd-vHV9h9uxaHtc4Q-NC4Z3VsXg?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" target="_blank">
@@ -348,6 +456,7 @@
 </div>
 </a>
 </div>
+
 <div class="card-box">
 <div class="card-header">👤 一對一 專人聯絡</div>
 <div class="contact-grid">
@@ -362,7 +471,8 @@
 </div>
 </div>
 </div>
-<!-- 分頁 2：VIP 招待所 -->
+
+<!-- 分頁 2：【VIP 招待所】 -->
 <div class="tab-panel" id="panel-rooms">
 <div class="card-box phone-box">
 <div class="card-header blue-header">📞 HOTLINE ｜ 即時語音諮詢</div>
@@ -378,14 +488,14 @@
 <div class="card-header">⚡ VIP Lounge ｜ 101 - 110（社群會員限定）</div>
 <div class="grid-rooms">
 <a class="room-item busy" data-room="101" href="https://line.me/ti/g2/_pozcfjocgAIcl5oXuMb0s1RJ0uKrlmKp8L84g" target="_blank">101<span>ROOM</span></a>
-<a class="room-item busy" data-room="102" href="https://line.me/ti/g2/m4OF-0zcsdEALTD3QE4lpSkwfU8uZjZ3rsTqSQ" target="_blank">102<span>ROOM</span></a>
+<a class="room-item" data-room="102" href="https://line.me/ti/g2/m4OF-0zcsdEALTD3QE4lpSkwfU8uZjZ3rsTqSQ" target="_blank">102<span>ROOM</span></a>
 <a class="room-item busy" data-room="103" href="https://line.me/ti/g2/k2lIL7GMrhOquBmdFLw6r7Wpu-K0a_QM_p6MHA" target="_blank">103<span>ROOM</span></a>
 <a class="room-item" data-room="104" href="https://line.me/ti/g2/hlx3ehotkyYz307eerHCDhezkqlkIo9XXyH9Dg" target="_blank">104<span>ROOM</span></a>
 <a class="room-item busy" data-room="105" href="https://line.me/ti/g2/5HBoo3LVf3zmvU49X_1AmrnUAlO949XHltnrvA" target="_blank">105<span>ROOM</span></a>
 <a class="room-item" data-room="106" href="https://line.me/ti/g2/TmjoaxprqX5LMZIOEhQ9Dmp5hlirHKwyDr3CnQ" target="_blank">106<span>ROOM</span></a>
 <a class="room-item" data-room="107" href="https://line.me/ti/g2/jU7YjqDh3ndA94BMpP6QKwnPfEth0dxT5q3dkg" target="_blank">107<span>ROOM</span></a>
 <a class="room-item" data-room="108" href="https://line.me/ti/g2/AwxKpQUhZf4HA2AS6HxMGG861ZnNxGDPVO8tTg" target="_blank">108<span>ROOM</span></a>
-<a class="room-item" data-room="109" href="https://line.me/ti/g2/AYcDvBN5lkxjPEyGR4QStfEdduJAVKSir9n7JA" target="_blank">109<span>ROOM</span></a>
+<a class="room-item busy" data-room="109" href="https://line.me/ti/g2/AYcDvBN5lkxjPEyGR4QStfEdduJAVKSir9n7JA" target="_blank">109<span>ROOM</span></a>
 <a class="room-item busy" data-room="110" href="https://line.me/ti/g2/o_uIRGp-rTHkarNc0H9D5n5KMtUSl_FC9PlvvQ" target="_blank">110<span>ROOM</span></a>
 </div>
 </div>
@@ -440,6 +550,7 @@
 </div>
 </div>
 </div>
+
 <!-- 分頁 3：【主要公告】 -->
 <div class="tab-panel" id="panel-notice">
 <div class="card-box">
@@ -499,7 +610,8 @@
 </div>
 </div>
 </div>
-<!-- 分頁 4：交付及退費政策 -->
+
+<!-- 分頁 4：【交付及退費政策】 -->
 <div class="tab-panel" id="panel-policy">
 <div class="card-box policy-content">
 <div class="policy-section">
@@ -561,33 +673,40 @@
 </div>
 <div class="footer">© 2026 閒人案內所 ｜ 頂級生活陪伴體驗</div>
 </div>
-<!-- 🌟 AI 智能風控總監 HTML 懸浮視窗 -->
+
+<!-- 🌟 AI 智能客服懸浮視窗 HTML -->
 <div id="ai-float-btn">👻</div>
+
 <div id="ai-chat-box">
-<div class="ai-chat-header">
-<span>🤖 閒人案內所 ｜ 智能風控總監</span>
-<div class="header-actions">
-<button class="ai-action-btn" onclick="clearChatHistory()" title="清空對話">🧹</button>
-<button class="ai-action-btn" id="ai-close-btn" title="關閉">✕</button>
+    <div class="ai-chat-header">
+        <span>🤖 閒人案內所 ｜ 智能風控總監</span>
+        <div class="header-actions">
+            <button class="ai-action-btn" onclick="clearChatHistory()" title="清空對話">🧹</button>
+            <button class="ai-action-btn" id="ai-close-btn" title="關閉">✕</button>
+        </div>
+    </div>
+    <div class="ai-chat-messages" id="ai-messages">
+        <div class="ai-msg bot">您好，我是閒人案內所的數位風控與客服總監。請問有關於預約媒合、發文格式或平台規則的問題想諮詢嗎？✨</div>
+    </div>
+    
+    <div class="ai-quick-chips">
+        <button onclick="sendQuickQuestion('請問求租或出租的發文格式？')">📋 發文格式</button>
+        <button onclick="sendQuickQuestion('取消預約與違約金如何計算？')">💰 退費違約金</button>
+        <button onclick="sendQuickQuestion('如何聯繫真人管管或申訴？')">👤 專人客服</button>
+    </div>
+
+    <div class="ai-chat-input-area">
+        <input type="text" id="ai-user-input" placeholder="輸入你想詢問的問題...">
+        <button id="ai-send-btn">發送</button>
+    </div>
 </div>
-</div>
-<div class="ai-chat-messages" id="ai-messages">
-<div class="ai-msg bot">您好，我是閒人案內所的數位風控與客服總監。請問有關於預約媒合、發文格式或平台規則的問題想諮詢嗎？✨</div>
-</div>
-<!-- 常見問答快捷標籤區塊 -->
-<div class="ai-quick-chips">
-<button onclick="sendQuickQuestion('請問求租或出租的發文格式？')">📋 發文格式</button>
-<button onclick="sendQuickQuestion('取消預約與違約金如何計算？')">💰 退費違約金</button>
-<button onclick="sendQuickQuestion('如何聯繫真人管管或申訴？')">👤 專人客服</button>
-</div>
-<div class="ai-chat-input-area">
-<input id="ai-user-input" placeholder="輸入你想詢問的問題..." type="text"/>
-<button id="ai-send-btn">發送</button>
-</div>
-</div>
+
 <!-- 🌟 核心腳本整合 -->
 <script>
     let isUnlocked = false;
+
+    // 🌟 請把這個填換成你的 Google Sheet ID 🌟
+    const GOOGLE_SHEET_ID = '1Jb4Q78kcbGZdVTTaDxDGtvW5RNuhGbb9PVAfl3VjzM'; 
 
     function switchTab(tabId) {
         if (tabId === 'rooms' && !isUnlocked) {
@@ -615,6 +734,54 @@
         if (targetSubBtn) targetSubBtn.classList.add('active');
         const targetSubPanel = document.getElementById('sub-panel-' + subTabId);
         if (targetSubPanel) targetSubPanel.classList.add('active');
+    }
+
+    // 🌟 從 Google Sheet 自動載入出租人資料
+    async function loadPartnersFromSheet() {
+        const container = document.getElementById('partner-grid');
+        if (!container) return;
+
+        try {
+            const response = await fetch(`https://opensheet.elk.sh/${GOOGLE_SHEET_ID}/1`);
+            if (!response.ok) throw new Error("無法讀取表格");
+
+            const data = await response.json();
+            container.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                container.innerHTML = `<div style="color: var(--text-gray); text-align: center; width: 100%;">目前尚未登記任何出租人夥伴。</div>`;
+                return;
+            }
+
+            data.forEach(item => {
+                const name = item['名字'] || '暱稱未填';
+                const gender = item['性別'] || '祕密';
+                const region = item['地區'] || '全台';
+                const bio = item['簡介'] || '這位夥伴很神秘，尚未填寫簡介...';
+
+                const genderClass = (gender === '女' || gender === '♀') ? 'female' : 'male';
+
+                container.innerHTML += `
+                    <div class="partner-card">
+                        <div>
+                            <div class="partner-header-row">
+                                <div class="partner-name">
+                                    👻 ${escapeHtml(name)}
+                                </div>
+                                <span class="partner-gender-badge ${genderClass}">${escapeHtml(gender)}</span>
+                            </div>
+                            <div class="partner-region">📍 ${escapeHtml(region)}</div>
+                            <div class="partner-bio">${escapeHtml(bio)}</div>
+                        </div>
+                        <a href="https://line.me/ti/p/L1iM3COUPl" target="_blank" class="partner-btn">聯繫管管預約 ${escapeHtml(name)} ➔</a>
+                    </div>
+                `;
+            });
+
+        } catch (error) {
+            console.error("載入夥伴失敗:", error);
+            container.innerHTML = `<div style="color: var(--neon-pink); text-align: center; width: 100%;">⚠️ 列表載入失敗，請確認已將 Google Sheet「發布到網路」。</div>`;
+        }
     }
 
     function toggleAIChat() {
@@ -646,12 +813,10 @@
         });
     }
 
-    // 🌟 AI 系統 Prompt 設定
     const systemPrompt = "你現在是「閒人案內所」的最高數位風控官兼首席智能客服總監。你的任務是：絕對捍衛品牌格調、嚴守法律紅線、保護合作夥伴與求租人權益、維護社群秩序、完美過濾一切惡意攻擊、引導新手正確使用格式與守則。語氣保持神祕霓虹美學、冷靜專業，適當使用符號（如 👻、🔮）。核心規則：嚴禁色情與擦邊交易、預付期最長2個月、7天內放鳥扣30%違約金、發文格式需符合 [求租/地區/性別] 名字。";
     
     let chatHistory = [{ role: "system", content: systemPrompt }];
 
-    // ⚡ 本地智能預判引擎 (高頻 FAQ 秒回，省等待時間)
     function getLocalSmartResponse(userText) {
         const text = userText.toLowerCase();
         
@@ -667,7 +832,7 @@
         if (text.includes("你好") || text.includes("嗨") || text.includes("hi") || text.includes("hello")) {
             return `您好！我是閒人案內所的數位風控與客服總監。請問今天有關於預約媒合、發文格式或平台規則的問題想諮詢嗎？✨`;
         }
-        return null; // 無匹配時走線上 AI
+        return null;
     }
 
     async function sendAIMessage() {
@@ -678,12 +843,10 @@
         const text = input.value.trim();
         if (!text) return;
 
-        // 1. 渲染使用者訊息
         container.innerHTML += `<div class="ai-msg user">${escapeHtml(text)}</div>`;
         input.value = '';
         container.scrollTop = container.scrollHeight;
 
-        // 2. 優先檢查是否命中「毫秒級預判引擎」
         const quickReply = getLocalSmartResponse(text);
         if (quickReply) {
             container.innerHTML += `<div class="ai-msg bot">${quickReply}</div>`;
@@ -691,7 +854,6 @@
             return;
         }
 
-        // 3. 未命中時，向線上 AI 請求
         chatHistory.push({ role: "user", content: text });
         const loadingId = 'loading-' + Date.now();
         container.innerHTML += `<div id="${loadingId}" class="ai-msg bot" style="color: #ffb020;">總監正在解析規則中... 🔮</div>`;
@@ -702,7 +864,6 @@
             const response = await fetch(apiUrl);
             const rawText = await response.text();
 
-            // 攔截 JSON 錯誤訊息
             if (rawText.trim().startsWith('{')) {
                 try {
                     const jsonRes = JSON.parse(rawText);
@@ -735,7 +896,6 @@
         return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); 
     }
 
-    // 輕量化 Markdown 渲染器 (將粗體與代碼轉為 HTML)
     function formatMarkdown(str) {
         let text = escapeHtml(str);
         text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
@@ -744,6 +904,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        loadPartnersFromSheet();
+
         const floatBtn = document.getElementById('ai-float-btn');
         const closeBtn = document.getElementById('ai-close-btn');
         const sendBtn = document.getElementById('ai-send-btn');

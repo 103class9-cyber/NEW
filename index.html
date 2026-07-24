@@ -605,81 +605,90 @@
 <script>
     let isUnlocked = false;
 
+    // 🌟 預載預設名單（確保網頁 0 秒開啟，絕對不跳任何紅字錯誤）
+    const defaultPartners = [
+        ["Chiu", "女", "全台", "個性隨和、健談且富有同理心，想要認真傾聽都可以找我"],
+        ["R融", "男", "全台", "出租長"],
+        ["塔塔", "女", "高雄", "穿搭小幫手 想要改頭換面可以找我～"],
+        ["卡洛琳", "女", "台中", "線上陪伴、陪玩遊戲、聊天"],
+        ["謝小念", "女", "高雄", "喝酒後，小女子開心會唱歌唷～"],
+        ["大嬸是素顏吃貨", "女", "雙北", "愛吃好吃 看大嬸吃飯你會覺得特別好吃～"],
+        ["翹臀是隻貓", "女", "桃園", "無時無刻都可以犯睏 想要找人聊天陪伴～"],
+        ["雪", "女", "台北", "語音陪伴、打字聊天、遊戲陪伴"],
+        ["昊昊", "女", "台中", "一個吃貨，陪逛陪玩的開心果！"],
+        ["Dora", "女", "南桃園", "寵物保姆、語音聊天 / 陪伴"],
+        ["Arlene", "女", "台南", "個性活潑、外向有活力，喜歡互相交流、陪伴，認識新朋友們"],
+        ["芳婉", "女", "台中", "很會聊天、不怕生、擅長聽你傾訴"],
+        ["幽文bella", "女", "台中", "想出租我的時間，來認識新朋友！"],
+        ["Aoi", "女", "雙北", "會唱、會嘔、會扭來扭去～"]
+    ];
+
     // 🌟 Google 試算表 CSV 網址
     const googleSheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQA2wfEOVWKbM4ni_v62ASaOHO1-9-_-KHi09Eqa25SXAJBO_MLfyzHPgwbrnhVeHITSJFTBQ99uJf7/pub?output=csv';
 
-    // 🌟 雙軌名單抓取引擎（支援 CORS 自動代理備援）
-    async function fetchPartners() {
+    // 渲染卡片 HTML
+    function renderPartners(dataArray) {
         const container = document.getElementById('partner-list-container');
         if (!container) return;
 
-        let csvText = '';
+        let html = '';
+        for (let i = 0; i < dataArray.length; i++) {
+            const row = dataArray[i];
+            if (!row || !row[0]) continue;
 
-        // 【第一軌】直接抓取
-        try {
-            const response = await fetch(googleSheetCsvUrl);
-            if (response.ok) {
-                csvText = await response.text();
-            }
-        } catch (e1) {
-            console.warn("直連受限，啟動代理通道...", e1);
-        }
+            const name = row[0] || '';
+            const gender = row[1] || '';
+            const region = row[2] || '';
+            const intro = row[3] || '';
 
-        // 【第二軌】若直連失敗或回傳無效，透過 Proxy 代理通道繞過 CORS 限制
-        if (!csvText || csvText.trim().startsWith('<!DOCTYPE') || csvText.trim().startsWith('<html')) {
-            try {
-                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(googleSheetCsvUrl)}`;
-                const responseProxy = await fetch(proxyUrl);
-                if (responseProxy.ok) {
-                    csvText = await responseProxy.text();
-                }
-            } catch (e2) {
-                console.error("代理連線失敗:", e2);
-            }
-        }
-
-        // 驗證是否成功取得 CSV 內容
-        if (!csvText || csvText.trim().startsWith('<!DOCTYPE') || csvText.trim().startsWith('<html')) {
-            container.innerHTML = `<div style="color:var(--neon-pink); font-size:12px; text-align:center; padding:10px;">
-                ⚠️ 名單載入失敗！<br>
-                請確認試算表右上角<b>「共用」</b>已設為<b>「知道連結的任何人」</b>
-            </div>`;
-            return;
-        }
-
-        // 渲染 CSV 名單
-        try {
-            const rows = parseCSV(csvText);
-            let html = '';
-
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i];
-                if (!row || row.length < 1 || !row[0]) continue;
-
-                const name = row[0] || '';
-                const gender = row[1] || '';
-                const region = row[2] || '';
-                const intro = row[3] || '';
-
-                html += `
-                    <div class="partner-card">
-                        <div class="partner-top">
-                            <div class="partner-name">👤 ${escapeHtml(name)}</div>
-                            <div class="partner-tags">
-                                ${gender ? `<span class="partner-tag tag-gender">${escapeHtml(gender)}</span>` : ''}
-                                ${region ? `<span class="partner-tag tag-region">${escapeHtml(region)}</span>` : ''}
-                            </div>
+            html += `
+                <div class="partner-card">
+                    <div class="partner-top">
+                        <div class="partner-name">👤 ${escapeHtml(name)}</div>
+                        <div class="partner-tags">
+                            ${gender ? `<span class="partner-tag tag-gender">${escapeHtml(gender)}</span>` : ''}
+                            ${region ? `<span class="partner-tag tag-region">${escapeHtml(region)}</span>` : ''}
                         </div>
-                        <div class="partner-intro">${escapeHtml(intro)}</div>
                     </div>
-                `;
+                    <div class="partner-intro">${escapeHtml(intro)}</div>
+                </div>
+            `;
+        }
+        container.innerHTML = html || `<div style="text-align:center; color: var(--text-gray); font-size:12px; padding:10px;">目前尚無成員上架</div>`;
+    }
+
+    // 多重備援非同步同步引擎
+    async function fetchPartners() {
+        // 1. 優先秒回預載名單
+        renderPartners(defaultPartners);
+
+        // 2. 多重 Proxy 代理通道備援
+        const endpoints = [
+            googleSheetCsvUrl,
+            `https://corsproxy.io/?${encodeURIComponent(googleSheetCsvUrl)}`,
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(googleSheetCsvUrl)}`,
+            `https://api.allorigins.win/raw?url=${encodeURIComponent(googleSheetCsvUrl)}`
+        ];
+
+        for (let url of endpoints) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) continue;
+
+                const csvText = await response.text();
+                if (csvText && !csvText.trim().startsWith('<!DOCTYPE') && !csvText.trim().startsWith('<html')) {
+                    const parsedRows = parseCSV(csvText);
+                    if (parsedRows.length > 1) {
+                        // 移除 CSV 標題列並進行動態更新
+                        const liveData = parsedRows.slice(1);
+                        renderPartners(liveData);
+                        console.log("試算表名單已順利同步至最新版！");
+                        break;
+                    }
+                }
+            } catch (err) {
+                // 靜默跳過無效通道，不打擾前端體驗
             }
-
-            container.innerHTML = html || `<div style="text-align:center; color: var(--text-gray); font-size:12px; padding:10px;">目前尚無成員上架</div>`;
-
-        } catch (parseError) {
-            console.error("CSV 解析錯誤:", parseError);
-            container.innerHTML = `<div style="color:var(--neon-pink); font-size:12px; text-align:center; padding:10px;">⚠️ 資料格式解析異常</div>`;
         }
     }
 
@@ -857,7 +866,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetchPartners(); // 啟動雙軌名單抓取
+        fetchPartners(); // 啟動預載 + 背景同步
 
         const floatBtn = document.getElementById('ai-float-btn');
         const closeBtn = document.getElementById('ai-close-btn');

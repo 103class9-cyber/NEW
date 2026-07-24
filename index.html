@@ -98,8 +98,8 @@
         transform: scale(1.02);
     }
 
-    .sub-tab-navigation { display: flex; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; padding: 4px; margin-bottom: 25px; gap: 4px; }
-    .sub-tab-btn { flex: 1; padding: 10px 2px; background: none; border: none; color: var(--text-gray); font-size: 11.5px; font-weight: 700; border-radius: 10px; cursor: pointer; transition: var(--transition-smooth); white-space: nowrap; }
+    .sub-tab-navigation { display: flex; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; padding: 4px; margin-bottom: 25px; gap: 4px; flex-wrap: wrap; }
+    .sub-tab-btn { flex: 1 1 22%; min-width: 70px; padding: 10px 2px; background: none; border: none; color: var(--text-gray); font-size: 10.5px; font-weight: 700; border-radius: 10px; cursor: pointer; transition: var(--transition-smooth); white-space: nowrap; }
     .sub-tab-btn.active { color: #ffffff; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.12); text-shadow: 0 0 4px rgba(255, 255, 255, 0.5); }
 
     .card-box {
@@ -115,12 +115,36 @@
     }
     .card-box.phone-box { border-color: rgba(0, 240, 255, 0.32); box-shadow: 0 0 35px rgba(0, 240, 255, 0.15), 0 20px 50px rgba(0, 0, 0, 0.65); }
 
-    .card-header { font-size: 14px; font-weight: 800; color: var(--neon-gold); margin-bottom: 24px; display: flex; align-items: center; gap: 14px; letter-spacing: 2px; text-shadow: 0 0 12px rgba(255, 176, 32, 0.45); }
+    .card-header { font-size: 14px; font-weight: 800; color: var(--neon-gold); margin-bottom: 20px; display: flex; align-items: center; gap: 14px; letter-spacing: 2px; text-shadow: 0 0 12px rgba(255, 176, 32, 0.45); }
     .card-header.blue-header { color: var(--neon-blue); text-shadow: 0 0 12px rgba(0, 240, 255, 0.45); }
     .card-header::after { content: ''; flex-grow: 1; height: 1px; background: linear-gradient(to right, rgba(255, 176, 32, 0.35), transparent); }
     .card-header.blue-header::after { background: linear-gradient(to right, rgba(0, 240, 255, 0.35), transparent); }
 
-    /* 🌟 時光夥伴動態卡片美化樣式 */
+    /* 選單式篩選區塊樣式 */
+    .filter-box {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 20px;
+        background: rgba(8, 5, 18, 0.6);
+        padding: 12px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .filter-item { display: flex; flex-direction: column; gap: 4px; text-align: left; }
+    .filter-item label { font-size: 10.5px; font-weight: 800; color: var(--neon-gold); letter-spacing: 0.5px; }
+    .filter-item select {
+        background: rgba(16, 12, 30, 0.9); border: 1px solid rgba(179, 102, 255, 0.35);
+        border-radius: 12px; color: #ffffff; padding: 8px 6px; font-size: 11.5px; font-weight: 700;
+        outline: none; cursor: pointer; transition: var(--transition-smooth);
+        appearance: none; -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;utf8,<svg fill='%2300f0ff' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+        background-repeat: no-repeat; background-position: right 6px center; padding-right: 18px;
+    }
+    .filter-item select:focus, .filter-item select:hover { border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); }
+    .filter-item select option { background: #0c061a; color: #ffffff; }
+
+    /* 時光夥伴動態卡片美化樣式 */
     .partner-grid { display: flex; flex-direction: column; gap: 12px; }
     .partner-card {
         background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06);
@@ -310,26 +334,16 @@
 <p class="subtitle">VIP Lounge Portal</p>
 </div>
 
+<!-- 主分頁導航：獨立「時光夥伴」頁籤 -->
 <div class="tab-navigation">
 <button class="tab-btn active" onclick="switchTab('home')">主頁</button>
+<button class="tab-btn" onclick="switchTab('partners')">時光夥伴</button>
 <button class="tab-btn" onclick="switchTab('rooms')">VIP 招待所</button>
 <button class="tab-btn" onclick="switchTab('notice')">主要公告</button>
-<button class="tab-btn" onclick="switchTab('policy')">交付及退費</button>
 </div>
 
 <!-- 分頁 1：【主頁】 -->
 <div class="tab-panel active" id="panel-home">
-
-<!-- 🌟 動態同步 Google 試算表：時光夥伴 / 出租人名單 -->
-<div class="card-box">
-<div class="card-header">👥 時光夥伴 ｜ 出租人名單</div>
-<div class="partner-grid" id="partner-list-container">
-    <div style="text-align:center; color: var(--neon-gold); font-size:13px; padding:10px;">
-        名單加載中... 🔮
-    </div>
-</div>
-</div>
-
 <div class="card-box">
 <div class="card-header">🏢 核心功能社群</div>
 <a class="link-card match-card" href="https://line.me/ti/g2/AyLxcfZMsmv-vg788A1BGUDK3RQ1wvcVawmzEw?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank">
@@ -343,7 +357,7 @@
 <div class="link-icon">💬</div>
 <div class="link-content">
 <div class="link-title">閒人聊天室 👻</div>
-<div class="link-desc">日常閒聊、交流與找尋同好的溫馨角落</div>
+<div class="link-desc">日常閒聊, 交流與找尋同好的溫馨角落</div>
 </div>
 </a>
 <a class="link-card room-card" href="https://line.me/ti/g2/yTUYTMHUoV1Dbs6UFvddBsYXef7qJTfHASS1jw?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank">
@@ -372,7 +386,42 @@
 </div>
 </div>
 
-<!-- 分頁 2：VIP 招待所 -->
+<!-- 分頁 2：【時光夥伴】 -->
+<div class="tab-panel" id="panel-partners">
+<div class="card-box">
+<div class="card-header">👥 時光夥伴 ｜ 出租人名單</div>
+
+<!-- 3階連動選單 -->
+<div class="filter-box">
+    <div class="filter-item">
+        <label>1. 性別</label>
+        <select id="filter-gender" onchange="onGenderChange()">
+            <option value="">請選擇性別</option>
+        </select>
+    </div>
+    <div class="filter-item">
+        <label>2. 地區</label>
+        <select id="filter-region" onchange="onRegionChange()">
+            <option value="">請選擇地區</option>
+        </select>
+    </div>
+    <div class="filter-item">
+        <label>3. 名稱</label>
+        <select id="filter-name" onchange="applyFilters()">
+            <option value="">請選擇名稱</option>
+        </select>
+    </div>
+</div>
+
+<div class="partner-grid" id="partner-list-container">
+    <div style="text-align:center; color: var(--text-gray); font-size:12.5px; padding:25px 10px;">
+        請選擇上方選單（性別 / 地區 / 名稱）進行查詢 🔮
+    </div>
+</div>
+</div>
+</div>
+
+<!-- 分頁 3：VIP 招待所 -->
 <div class="tab-panel" id="panel-rooms">
 <div class="card-box phone-box">
 <div class="card-header blue-header">📞 HOTLINE ｜ 即時語音諮詢</div>
@@ -451,7 +500,7 @@
 </div>
 </div>
 
-<!-- 分頁 3：【主要公告】 -->
+<!-- 分頁 4：【主要公告】 -->
 <div class="tab-panel" id="panel-notice">
 <div class="card-box">
 <div class="card-header">📢 NOTICE ｜ 平台營運主要公告</div>
@@ -459,7 +508,10 @@
 <button class="sub-tab-btn active" onclick="switchSubTab('sub-terms')">📋 法律免責</button>
 <button class="sub-tab-btn" onclick="switchSubTab('sub-client')">👤 求租人</button>
 <button class="sub-tab-btn" onclick="switchSubTab('sub-partner')">👥 出租人</button>
+<button class="sub-tab-btn" onclick="switchSubTab('sub-policy')">💳 交付及退費</button>
 </div>
+
+<!-- 1. 法律免責 -->
 <div class="sub-tab-panel active" id="sub-panel-sub-terms">
 <div class="policy-list">
 <div class="policy-item notice-cyan">
@@ -472,6 +524,8 @@
 </div>
 </div>
 </div>
+
+<!-- 2. 求租人 -->
 <div class="sub-tab-panel" id="sub-panel-sub-client">
 <div class="policy-list">
 <div class="policy-item notice-blue">
@@ -488,6 +542,8 @@
 </div>
 </div>
 </div>
+
+<!-- 3. 出租人 -->
 <div class="sub-tab-panel" id="sub-panel-sub-partner">
 <div class="policy-list">
 <div class="policy-item notice-cyan">
@@ -508,12 +564,10 @@
 </div>
 </div>
 </div>
-</div>
-</div>
 
-<!-- 分頁 4：交付及退費政策 -->
-<div class="tab-panel" id="panel-policy">
-<div class="card-box policy-content">
+<!-- 4. 交付及退費 -->
+<div class="sub-tab-panel" id="sub-panel-sub-policy">
+<div class="policy-content">
 <div class="policy-section">
 <div class="policy-section-title">一、 服務預約與履約確認 SOP</div>
 <ul class="policy-list">
@@ -564,13 +618,16 @@
 </li>
 <li class="policy-item">
 <div class="policy-item-title"><span>3.</span> 交易糾紛與申訴管道</div>
-<div class="policy-item-desc" style="margin-bottom: 8px;">本社群設有專屬一對一聯絡管道（直接聯繫管理員管管）。若有任何服務不符之處，或拾光人有違反公約紅線之客觀違規事實（如違反肢體接觸禁令、言語羞辱、騷擾行為等），時光分享者有權立即中止行程，費用 100% 沒收。</div>
-<div class="policy-item-desc">請於服務結束後 24 小時內直接向管管提出爭議申訴。管理端與管管將於收到申訴後 48 小時內完成事實釐清。若確認夥伴違約（遲到、早退、態度惡劣），將依比例或全額退款。</div>
+<div class="policy-item-desc" style="margin-bottom: 8px;">本社群設有專屬一對一聯絡管道（私訊管管）。若有任何服務不符或違規爭議，請於 24 小時內提出，管理端將於 48 小時內完成事實釐清。</div>
 </li>
 </ul>
 </div>
 </div>
 </div>
+
+</div>
+</div>
+
 <div class="footer">© 2026 閒人案內所 ｜ 頂級生活陪伴體驗</div>
 </div>
 
@@ -591,6 +648,8 @@
     
     <div class="ai-quick-chips">
         <button onclick="sendQuickQuestion('請問求租或出租的發文格式？')">📋 發文格式</button>
+        <button onclick="sendQuickQuestion('線下委託格式是什麼？')">💳 線下定金格式</button>
+        <button onclick="sendQuickQuestion('線上委託格式是什麼？')">🌐 線上預付格式</button>
         <button onclick="sendQuickQuestion('取消預約與違約金如何計算？')">💰 退費違約金</button>
         <button onclick="sendQuickQuestion('如何聯繫真人管管或申訴？')">👤 專人客服</button>
     </div>
@@ -601,32 +660,125 @@
     </div>
 </div>
 
-<!-- 🌟 核心腳本整合 -->
+<!-- 🌟 核心腳本整合（支援格式一、格式二一鍵複製與 Google 試算表即時連動） -->
 <script>
     let isUnlocked = false;
+    let allPartnersData = [];
 
-    // 🌟 預載預設名單（確保網頁 0 秒開啟，絕對不跳任何紅字錯誤）
-    const defaultPartners = [
-        ["Chiu", "女", "全台", "個性隨和、健談且富有同理心，想要認真傾聽都可以找我"],
-        ["R融", "男", "全台", "出租長"],
-        ["塔塔", "女", "高雄", "穿搭小幫手 想要改頭換面可以找我～"],
-        ["卡洛琳", "女", "台中", "線上陪伴、陪玩遊戲、聊天"],
-        ["謝小念", "女", "高雄", "喝酒後，小女子開心會唱歌唷～"],
-        ["大嬸是素顏吃貨", "女", "雙北", "愛吃好吃 看大嬸吃飯你會覺得特別好吃～"],
-        ["翹臀是隻貓", "女", "桃園", "無時無刻都可以犯睏 想要找人聊天陪伴～"],
-        ["雪", "女", "台北", "語音陪伴、打字聊天、遊戲陪伴"],
-        ["昊昊", "女", "台中", "一個吃貨，陪逛陪玩的開心果！"],
-        ["Dora", "女", "南桃園", "寵物保姆、語音聊天 / 陪伴"],
-        ["Arlene", "女", "台南", "個性活潑、外向有活力，喜歡互相交流、陪伴，認識新朋友們"],
-        ["芳婉", "女", "台中", "很會聊天、不怕生、擅長聽你傾訴"],
-        ["幽文bella", "女", "台中", "想出租我的時間，來認識新朋友！"],
-        ["Aoi", "女", "雙北", "會唱、會嘔、會扭來扭去～"]
-    ];
+    const googleSheetApiUrl = 'https://script.google.com/macros/s/AKfycbwq8k7IsDwA5vAKEJkIWwYyhFUFGWAEIHqaidJgPh88wdri8wyTLDyDiQ1VNhH-RTuKSQ/exec';
 
-    // 🌟 Google 試算表 CSV 網址
-    const googleSheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQA2wfEOVWKbM4ni_v62ASaOHO1-9-_-KHi09Eqa25SXAJBO_MLfyzHPgwbrnhVeHITSJFTBQ99uJf7/pub?output=csv';
+    async function fetchPartners() {
+        try {
+            const response = await fetch(googleSheetApiUrl);
+            if (!response.ok) throw new Error("API Network response was not ok");
+            const data = await response.json();
 
-    // 渲染卡片 HTML
+            if (data && Array.isArray(data) && data.length > 0) {
+                const filtered = data.filter((row, idx) => {
+                    if (!row || !row[0]) return false;
+                    const nameStr = String(row[0]).trim();
+                    if (nameStr === "名字" || nameStr.toLowerCase() === "name") return false;
+                    return true;
+                });
+                
+                updatePartnersData(filtered);
+            }
+        } catch (error) {
+            console.error("試算表 API 同步失敗:", error);
+            const container = document.getElementById('partner-list-container');
+            if (container) {
+                container.innerHTML = `<div style="text-align:center; color: var(--neon-pink); font-size:12px; padding:20px;">
+                    ⚠️ 名單載入失敗，請確認 API 已部署並設為「任何人」存取。
+                </div>`;
+            }
+        }
+    }
+
+    function updatePartnersData(dataArray) {
+        allPartnersData = dataArray;
+        populateGenderOptions();
+        populateRegionOptions();
+        populateNameOptions();
+        applyFilters();
+    }
+
+    function populateGenderOptions() {
+        const select = document.getElementById('filter-gender');
+        if (!select) return;
+        const genders = [...new Set(allPartnersData.map(r => r[1]).filter(Boolean))];
+        let html = '<option value="">請選擇性別</option>';
+        genders.forEach(g => {
+            html += `<option value="${escapeHtml(String(g))}">${escapeHtml(String(g))}</option>`;
+        });
+        select.innerHTML = html;
+    }
+
+    function populateRegionOptions() {
+        const genderVal = document.getElementById('filter-gender')?.value || '';
+        const select = document.getElementById('filter-region');
+        if (!select) return;
+
+        let filtered = allPartnersData;
+        if (genderVal) filtered = filtered.filter(r => String(r[1]) === genderVal);
+
+        const regions = [...new Set(filtered.map(r => r[2]).filter(Boolean))];
+        let html = '<option value="">請選擇地區</option>';
+        regions.forEach(reg => {
+            html += `<option value="${escapeHtml(String(reg))}">${escapeHtml(String(reg))}</option>`;
+        });
+        select.innerHTML = html;
+    }
+
+    function populateNameOptions() {
+        const genderVal = document.getElementById('filter-gender')?.value || '';
+        const regionVal = document.getElementById('filter-region')?.value || '';
+        const select = document.getElementById('filter-name');
+        if (!select) return;
+
+        let filtered = allPartnersData;
+        if (genderVal) filtered = filtered.filter(r => String(r[1]) === genderVal);
+        if (regionVal) filtered = filtered.filter(r => String(r[2]) === regionVal);
+
+        const names = [...new Set(filtered.map(r => r[0]).filter(Boolean))];
+        let html = '<option value="">請選擇名稱</option>';
+        names.forEach(n => {
+            html += `<option value="${escapeHtml(String(n))}">${escapeHtml(String(n))}</option>`;
+        });
+        select.innerHTML = html;
+    }
+
+    function onGenderChange() {
+        populateRegionOptions();
+        populateNameOptions();
+        applyFilters();
+    }
+
+    function onRegionChange() {
+        populateNameOptions();
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const genderVal = document.getElementById('filter-gender')?.value || '';
+        const regionVal = document.getElementById('filter-region')?.value || '';
+        const nameVal = document.getElementById('filter-name')?.value || '';
+
+        const container = document.getElementById('partner-list-container');
+        if (!container) return;
+
+        if (!genderVal && !regionVal && !nameVal) {
+            container.innerHTML = `<div style="text-align:center; color: var(--text-gray); font-size:12.5px; padding:25px 10px;">請選擇上方選單（性別 / 地區 / 名稱）進行查詢 🔮</div>`;
+            return;
+        }
+
+        let result = allPartnersData;
+        if (genderVal) result = result.filter(r => String(r[1]) === genderVal);
+        if (regionVal) result = result.filter(r => String(r[2]) === regionVal);
+        if (nameVal) result = result.filter(r => String(r[0]) === nameVal);
+
+        renderPartners(result);
+    }
+
     function renderPartners(dataArray) {
         const container = document.getElementById('partner-list-container');
         if (!container) return;
@@ -644,78 +796,17 @@
             html += `
                 <div class="partner-card">
                     <div class="partner-top">
-                        <div class="partner-name">👤 ${escapeHtml(name)}</div>
+                        <div class="partner-name">👤 ${escapeHtml(String(name))}</div>
                         <div class="partner-tags">
-                            ${gender ? `<span class="partner-tag tag-gender">${escapeHtml(gender)}</span>` : ''}
-                            ${region ? `<span class="partner-tag tag-region">${escapeHtml(region)}</span>` : ''}
+                            ${gender ? `<span class="partner-tag tag-gender">${escapeHtml(String(gender))}</span>` : ''}
+                            ${region ? `<span class="partner-tag tag-region">${escapeHtml(String(region))}</span>` : ''}
                         </div>
                     </div>
-                    <div class="partner-intro">${escapeHtml(intro)}</div>
+                    <div class="partner-intro">${escapeHtml(String(intro))}</div>
                 </div>
             `;
         }
-        container.innerHTML = html || `<div style="text-align:center; color: var(--text-gray); font-size:12px; padding:10px;">目前尚無成員上架</div>`;
-    }
-
-    // 多重備援非同步同步引擎
-    async function fetchPartners() {
-        // 1. 優先秒回預載名單
-        renderPartners(defaultPartners);
-
-        // 2. 多重 Proxy 代理通道備援
-        const endpoints = [
-            googleSheetCsvUrl,
-            `https://corsproxy.io/?${encodeURIComponent(googleSheetCsvUrl)}`,
-            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(googleSheetCsvUrl)}`,
-            `https://api.allorigins.win/raw?url=${encodeURIComponent(googleSheetCsvUrl)}`
-        ];
-
-        for (let url of endpoints) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) continue;
-
-                const csvText = await response.text();
-                if (csvText && !csvText.trim().startsWith('<!DOCTYPE') && !csvText.trim().startsWith('<html')) {
-                    const parsedRows = parseCSV(csvText);
-                    if (parsedRows.length > 1) {
-                        // 移除 CSV 標題列並進行動態更新
-                        const liveData = parsedRows.slice(1);
-                        renderPartners(liveData);
-                        console.log("試算表名單已順利同步至最新版！");
-                        break;
-                    }
-                }
-            } catch (err) {
-                // 靜默跳過無效通道，不打擾前端體驗
-            }
-        }
-    }
-
-    // CSV 解析器 (相容引號與逗號)
-    function parseCSV(text) {
-        const lines = text.split(/\r?\n/);
-        const result = [];
-        for (let line of lines) {
-            if (!line.trim()) continue;
-            const row = [];
-            let insideQuote = false;
-            let entry = '';
-            for (let i = 0; i < line.length; i++) {
-                let char = line[i];
-                if (char === '"') {
-                    insideQuote = !insideQuote;
-                } else if (char === ',' && !insideQuote) {
-                    row.push(entry.replace(/^"|"$/g, '').trim());
-                    entry = '';
-                } else {
-                    entry += char;
-                }
-            }
-            row.push(entry.replace(/^"|"$/g, '').trim());
-            result.push(row);
-        }
-        return result;
+        container.innerHTML = html || `<div style="text-align:center; color: var(--text-gray); font-size:12px; padding:15px;">沒有符合條件的成員</div>`;
     }
 
     function switchTab(tabId) {
@@ -769,7 +860,7 @@
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
-            alert("📋 已複製發文格式到剪貼簿！");
+            alert("📋 已成功複製格式到剪貼簿！");
         }).catch(() => {
             prompt("請手動複製以下格式：", text);
         });
@@ -779,11 +870,21 @@
     
     let chatHistory = [{ role: "system", content: systemPrompt }];
 
+    // 🌟 智慧語意與格式一、格式二本地回應引擎
     function getLocalSmartResponse(userText) {
         const text = userText.toLowerCase();
         
-        if (text.includes("格式") || text.includes("發文")) {
-            return `發文格式請務必符合規範：\n\`[求租/地區/性別] 名字\`\n\n範例：\`[求租/台北/女] 小雅\`\n\n<button class="copy-code-btn" onclick="copyToClipboard('[求租/地區/性別] 名字')">📋 一鍵複製範本</button>`;
+        if (text.includes("格式") && (text.includes("求租") || text.includes("出租") || text.includes("發文"))) {
+            const formatText = "[求租/地區/性別] 名字";
+            return `標準發文格式規範：\n\`${formatText}\`\n（例如：\`[求租/台北/女] 小雅\`）\n\n<button class="copy-code-btn" onclick="copyToClipboard('${escapeHtml(formatText)}')">📋 一鍵複製發文格式</button>`;
+        }
+        if (text.includes("線下") || text.includes("定金") || text.includes("30%") || text.includes("格式一")) {
+            const formatOne = `💳 格式一：【線下委託｜30% 定金制】\n適用於客戶選擇現場付現的單。\n雙方如果確定要預約（線下委託），請求租方先將 30% 定金 匯至下方帳號，轉帳完成後請上傳轉帳成功截圖。確認收到後，管理團隊會發送「管管預約成功通知」為您保留名額。其餘 70% 尾款請於見面現場直接付現 給出租人。\n⚠️ 備註：若於行程前 7 天內臨時取消或放鳥，將扣除總額 30% 作為交易取消違約金，謝謝您！\n預約日期：\n預約時間：\n委託總額：\n應付定金 (30%)：\n現場尾款 (70%)：`;
+            return `${formatOne}\n\n<button class="copy-code-btn" onclick="copyToClipboard(${JSON.stringify(formatOne)})">📋 一鍵複製線下委託格式</button>`;
+        }
+        if (text.includes("線上") || text.includes("全額") || text.includes("預付") || text.includes("格式二")) {
+            const formatTwo = `🌐 格式二：【線上委託｜全額預付制】\n適用於全線上委託、不經手現場現金的單。\n雙方如果確定要預約（線上委託），請求租方先將 全額款項 匯至下方帳號，轉帳完成後請上傳轉帳成功截圖。確認收到後，管理團隊會發送「管管預約成功通知」為您保留名額，後續我們將在指定時間撥款給出租人。\n⚠️ 備註：若於行程前 7 天內臨時取消或放鳥，將扣除總額 30% 作為交易取消違約金，謝謝您！\n預約日期：\n預約時間：\n委託金額 (全額)：`;
+            return `${formatTwo}\n\n<button class="copy-code-btn" onclick="copyToClipboard(${JSON.stringify(formatTwo)})">📋 一鍵複製線上委託格式</button>`;
         }
         if (text.includes("退費") || text.includes("取消") || text.includes("放鳥") || text.includes("違約金")) {
             return `根據《閒人案內所交付及退費政策》：\n• 約定時間 **7天前** 取消：退還餘額（扣除金流手續費）。\n• 約定時間 **7天內** 臨退/放鳥：沒收總金額 **30% 作為違約金**（10% 撥付夥伴補償，20% 為平台行政費）。👻`;
@@ -792,7 +893,7 @@
             return `專人服務請直接點擊以下連結一對一私訊：\n<a class="chat-link-btn" href="https://line.me/ti/p/L1iM3COUPl" target="_blank">👩‍💼 點此私訊【聯絡管管】</a>\n<a class="chat-link-btn" href="https://line.me/ti/p/mR19KggePp" target="_blank">👨‍💼 點此私訊【聯絡所長】</a>`;
         }
         if (text.includes("你好") || text.includes("嗨") || text.includes("hi") || text.includes("hello")) {
-            return `您好！我是閒人案內所的數位風控與客服總監。請問今天有關於預約媒合、發文格式或平台規則的問題想諮詢嗎？✨`;
+            return `您好！我是閒人案內所的數位風控與客服總監。請問今天有關於預約媒合、發文格式（線下/線上委託）或平台規則的問題想諮詢嗎？✨`;
         }
         return null;
     }
@@ -855,7 +956,7 @@
     }
 
     function escapeHtml(str) { 
-        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); 
+        return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); 
     }
 
     function formatMarkdown(str) {
@@ -866,7 +967,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetchPartners(); // 啟動預載 + 背景同步
+        fetchPartners();
 
         const floatBtn = document.getElementById('ai-float-btn');
         const closeBtn = document.getElementById('ai-close-btn');

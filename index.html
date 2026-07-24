@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="zh-TW">
 <head>
 <meta charset="utf-8"/>
@@ -86,20 +85,10 @@
     }
 
     .tab-btn {
-        flex: 1;
-        padding: 12px 2px;
-        background: none;
-        border: none;
-        color: var(--text-gray);
-        font-size: 11.5px;
-        font-weight: 700;
-        border-radius: 14px;
-        cursor: pointer;
-        transition: var(--transition-smooth);
-        white-space: nowrap;
-        letter-spacing: 0.3px;
+        flex: 1; padding: 12px 2px; background: none; border: none; color: var(--text-gray);
+        font-size: 11.5px; font-weight: 700; border-radius: 14px; cursor: pointer; transition: var(--transition-smooth);
+        white-space: nowrap; letter-spacing: 0.3px;
     }
-
     .tab-btn.active {
         color: #ffffff;
         background: linear-gradient(135deg, rgba(179, 102, 255, 0.38) 0%, rgba(0, 240, 255, 0.18) 100%);
@@ -124,13 +113,30 @@
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.03);
         text-align: left;
     }
-
     .card-box.phone-box { border-color: rgba(0, 240, 255, 0.32); box-shadow: 0 0 35px rgba(0, 240, 255, 0.15), 0 20px 50px rgba(0, 0, 0, 0.65); }
 
     .card-header { font-size: 14px; font-weight: 800; color: var(--neon-gold); margin-bottom: 24px; display: flex; align-items: center; gap: 14px; letter-spacing: 2px; text-shadow: 0 0 12px rgba(255, 176, 32, 0.45); }
     .card-header.blue-header { color: var(--neon-blue); text-shadow: 0 0 12px rgba(0, 240, 255, 0.45); }
     .card-header::after { content: ''; flex-grow: 1; height: 1px; background: linear-gradient(to right, rgba(255, 176, 32, 0.35), transparent); }
     .card-header.blue-header::after { background: linear-gradient(to right, rgba(0, 240, 255, 0.35), transparent); }
+
+    /* 🌟 時光夥伴動態卡片美化樣式 */
+    .partner-grid { display: flex; flex-direction: column; gap: 12px; }
+    .partner-card {
+        background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 18px; padding: 14px 18px; transition: 0.3s var(--ease-premium);
+    }
+    .partner-card:hover {
+        border-color: var(--neon-purple); background: rgba(179, 102, 255, 0.05);
+        transform: translateY(-3px); box-shadow: 0 5px 20px rgba(179, 102, 255, 0.2);
+    }
+    .partner-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .partner-name { font-size: 15px; font-weight: 800; color: #fff; }
+    .partner-tags { display: flex; gap: 6px; }
+    .partner-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+    .tag-gender { background: rgba(0, 240, 255, 0.15); color: #00f0ff; border: 1px solid rgba(0, 240, 255, 0.3); }
+    .tag-region { background: rgba(255, 176, 32, 0.15); color: #ffb020; border: 1px solid rgba(255, 176, 32, 0.3); }
+    .partner-intro { font-size: 12.5px; color: #aca4ba; line-height: 1.5; }
 
     .link-card { display: flex; align-items: center; padding: 24px 26px; background: rgba(255, 255, 255, 0.005); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 24px; text-decoration: none; color: #ffffff; margin-bottom: 20px; transition: var(--ease-premium) 0.45s; position: relative; overflow: hidden; backdrop-filter: blur(10px); }
     .link-card::before { content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%; background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.1), transparent); transition: 0.6s var(--ease-premium); }
@@ -172,21 +178,12 @@
         border-color: var(--neon-pink) !important;
         background: linear-gradient(135deg, rgba(255, 42, 109, 0.15) 0%, rgba(12, 6, 20, 0.8) 100%) !important;
         box-shadow: 0 0 15px rgba(255, 42, 109, 0.25) !important;
-        position: relative;
-        opacity: 1;
-        pointer-events: auto !important;
+        position: relative; opacity: 1; pointer-events: auto !important;
     }
     .room-item.busy::after {
-        content: '● BUSY';
-        position: absolute;
-        top: 4px; right: 6px;
-        font-size: 7px;
-        font-weight: 900;
-        color: var(--neon-pink);
-        text-shadow: 0 0 5px var(--neon-pink);
-        letter-spacing: 0.5px;
-        animation: flashGlow 1.5s infinite alternate;
-        pointer-events: none;
+        content: '● BUSY'; position: absolute; top: 4px; right: 6px; font-size: 7px;
+        font-weight: 900; color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink);
+        letter-spacing: 0.5px; animation: flashGlow 1.5s infinite alternate; pointer-events: none;
     }
 
     .talk-list { display: flex; flex-direction: column; gap: 14px; }
@@ -217,103 +214,7 @@
     .tab-panel.active { display: block; animation: fadeIn 0.5s var(--ease-premium) forwards; }
     .sub-tab-panel.active { display: block; animation: fadeInSub 0.4s var(--ease-premium) forwards; }
 
-    /* 🌟 出租人 (時光夥伴) 卡片專屬樣式 */
-    .partner-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 16px;
-        margin-top: 10px;
-    }
-
-    .partner-card {
-        background: rgba(16, 12, 30, 0.82);
-        border: 1px solid rgba(179, 102, 255, 0.22);
-        border-radius: 22px;
-        padding: 20px 18px;
-        text-align: left;
-        position: relative;
-        backdrop-filter: blur(20px);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-
-    .partner-card:hover {
-        transform: translateY(-4px);
-        border-color: var(--neon-cyan);
-        box-shadow: 0 12px 30px rgba(0, 240, 255, 0.25);
-    }
-
-    .partner-header-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 8px;
-    }
-
-    .partner-name {
-        font-size: 18px;
-        font-weight: 800;
-        color: #ffffff;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .partner-gender-badge {
-        font-size: 10px;
-        padding: 2px 7px;
-        border-radius: 12px;
-        font-weight: 800;
-    }
-    .partner-gender-badge.female { background: rgba(255, 42, 109, 0.15); color: var(--neon-pink); border: 1px solid rgba(255, 42, 109, 0.3); }
-    .partner-gender-badge.male { background: rgba(0, 240, 255, 0.15); color: var(--neon-cyan); border: 1px solid rgba(0, 240, 255, 0.3); }
-
-    .partner-region {
-        font-size: 12px;
-        color: var(--neon-gold);
-        font-weight: 700;
-        margin-bottom: 12px;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .partner-bio {
-        font-size: 13px;
-        color: #c7c0db;
-        line-height: 1.65;
-        margin-bottom: 16px;
-        background: rgba(255, 255, 255, 0.02);
-        padding: 12px 14px;
-        border-radius: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        word-break: break-word;
-    }
-
-    .partner-btn {
-        width: 100%;
-        padding: 10px 0;
-        background: linear-gradient(135deg, rgba(179, 102, 255, 0.25), rgba(0, 240, 255, 0.18));
-        border: 1px solid var(--neon-purple);
-        border-radius: 14px;
-        color: #ffffff;
-        font-size: 13px;
-        font-weight: 700;
-        text-align: center;
-        text-decoration: none;
-        display: block;
-        transition: 0.3s;
-    }
-
-    .partner-btn:hover {
-        background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
-        box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
-    }
-
-    /* AI 智能風控總監 UI 樣式 */
+    /* AI 客服視窗 UI */
     #ai-float-btn {
         position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px;
         background: linear-gradient(135deg, #b366ff, #00f0ff); border-radius: 50%;
@@ -350,7 +251,7 @@
     .ai-msg { padding: 10px 14px; border-radius: 14px; max-width: 88%; word-break: break-word; white-space: pre-wrap; }
     .ai-msg.bot { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); align-self: flex-start; color: #b2ced4; }
     .ai-msg.user { background: linear-gradient(135deg, rgba(179, 102, 255, 0.3), rgba(0, 240, 255, 0.2)); border: 1px solid rgba(179, 102, 255, 0.4); align-self: flex-end; color: #ffffff; }
-    
+
     .chat-link-btn {
         display: inline-block; margin-top: 6px; padding: 6px 12px; background: rgba(0, 240, 255, 0.15);
         border: 1px solid #00f0ff; color: #00f0ff; border-radius: 10px; text-decoration: none;
@@ -408,24 +309,27 @@
 <h1 class="title">閒人案內所</h1>
 <p class="subtitle">VIP Lounge Portal</p>
 </div>
-<!-- 頂部分頁選單 -->
+
 <div class="tab-navigation">
 <button class="tab-btn active" onclick="switchTab('home')">主頁</button>
 <button class="tab-btn" onclick="switchTab('rooms')">VIP 招待所</button>
 <button class="tab-btn" onclick="switchTab('notice')">主要公告</button>
 <button class="tab-btn" onclick="switchTab('policy')">交付及退費</button>
 </div>
+
 <!-- 分頁 1：【主頁】 -->
 <div class="tab-panel active" id="panel-home">
-<!-- 🌟【最上方】時光夥伴 / 出租人名單 -->
+
+<!-- 🌟 動態同步 Google 試算表：時光夥伴 / 出租人名單 -->
 <div class="card-box">
 <div class="card-header">👥 時光夥伴 ｜ 出租人名單</div>
-<div class="partner-grid" id="partner-grid">
-<div style="color: var(--neon-gold); text-align: center; width: 100%; padding: 20px;">
-    正在同步最新出租人資料中... 🔮
+<div class="partner-grid" id="partner-list-container">
+    <div style="text-align:center; color: var(--neon-gold); font-size:13px; padding:10px;">
+        名單加載中... 🔮
+    </div>
 </div>
 </div>
-</div>
+
 <div class="card-box">
 <div class="card-header">🏢 核心功能社群</div>
 <a class="link-card match-card" href="https://line.me/ti/g2/HjSXyaP1srrEd-vHV9h9uxaHtc4Q-NC4Z3VsXg?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" target="_blank">
@@ -467,7 +371,8 @@
 </div>
 </div>
 </div>
-<!-- 分頁 2：【VIP 招待所】 -->
+
+<!-- 分頁 2：VIP 招待所 -->
 <div class="tab-panel" id="panel-rooms">
 <div class="card-box phone-box">
 <div class="card-header blue-header">📞 HOTLINE ｜ 即時語音諮詢</div>
@@ -483,7 +388,7 @@
 <div class="card-header">⚡ VIP Lounge ｜ 101 - 110（社群會員限定）</div>
 <div class="grid-rooms">
 <a class="room-item busy" data-room="101" href="https://line.me/ti/g2/_pozcfjocgAIcl5oXuMb0s1RJ0uKrlmKp8L84g" target="_blank">101<span>ROOM</span></a>
-<a class="room-item busy" data-room="102" href="https://line.me/ti/g2/m4OF-0zcsdEALTD3QE4lpSkwfU8uZjZ3rsTqSQ" target="_blank">102<span>ROOM</span></a>
+<a class="room-item" data-room="102" href="https://line.me/ti/g2/m4OF-0zcsdEALTD3QE4lpSkwfU8uZjZ3rsTqSQ" target="_blank">102<span>ROOM</span></a>
 <a class="room-item busy" data-room="103" href="https://line.me/ti/g2/k2lIL7GMrhOquBmdFLw6r7Wpu-K0a_QM_p6MHA" target="_blank">103<span>ROOM</span></a>
 <a class="room-item" data-room="104" href="https://line.me/ti/g2/hlx3ehotkyYz307eerHCDhezkqlkIo9XXyH9Dg" target="_blank">104<span>ROOM</span></a>
 <a class="room-item busy" data-room="105" href="https://line.me/ti/g2/5HBoo3LVf3zmvU49X_1AmrnUAlO949XHltnrvA" target="_blank">105<span>ROOM</span></a>
@@ -545,6 +450,7 @@
 </div>
 </div>
 </div>
+
 <!-- 分頁 3：【主要公告】 -->
 <div class="tab-panel" id="panel-notice">
 <div class="card-box">
@@ -604,7 +510,8 @@
 </div>
 </div>
 </div>
-<!-- 分頁 4：【交付及退費政策】 -->
+
+<!-- 分頁 4：交付及退費政策 -->
 <div class="tab-panel" id="panel-policy">
 <div class="card-box policy-content">
 <div class="policy-section">
@@ -666,35 +573,79 @@
 </div>
 <div class="footer">© 2026 閒人案內所 ｜ 頂級生活陪伴體驗</div>
 </div>
-<!-- AI 智能客服懸浮視窗 HTML -->
+
+<!-- 🌟 AI 智能風控總監 HTML 懸浮視窗 -->
 <div id="ai-float-btn">👻</div>
+
 <div id="ai-chat-box">
-<div class="ai-chat-header">
-<span>🤖 閒人案內所 ｜ 智能風控總監</span>
-<div class="header-actions">
-<button class="ai-action-btn" onclick="clearChatHistory()" title="清空對話">🧹</button>
-<button class="ai-action-btn" id="ai-close-btn" title="關閉">✕</button>
+    <div class="ai-chat-header">
+        <span>🤖 閒人案內所 ｜ 智能風控總監</span>
+        <div class="header-actions">
+            <button class="ai-action-btn" onclick="clearChatHistory()" title="清空對話">🧹</button>
+            <button class="ai-action-btn" id="ai-close-btn" title="關閉">✕</button>
+        </div>
+    </div>
+    <div class="ai-chat-messages" id="ai-messages">
+        <div class="ai-msg bot">您好，我是閒人案內所的數位風控與客服總監。請問有關於預約媒合、發文格式或平台規則的問題想諮詢嗎？✨</div>
+    </div>
+    
+    <div class="ai-quick-chips">
+        <button onclick="sendQuickQuestion('請問求租或出租的發文格式？')">📋 發文格式</button>
+        <button onclick="sendQuickQuestion('取消預約與違約金如何計算？')">💰 退費違約金</button>
+        <button onclick="sendQuickQuestion('如何聯繫真人管管或申訴？')">👤 專人客服</button>
+    </div>
+
+    <div class="ai-chat-input-area">
+        <input type="text" id="ai-user-input" placeholder="輸入你想詢問的問題...">
+        <button id="ai-send-btn">發送</button>
+    </div>
 </div>
-</div>
-<div class="ai-chat-messages" id="ai-messages">
-<div class="ai-msg bot">您好，我是閒人案內所的數位風控與客服總監。請問有關於預約媒合、發文格式或平台規則的問題想諮詢嗎？✨</div>
-</div>
-<div class="ai-quick-chips">
-<button onclick="sendQuickQuestion('請問求租或出租的發文格式？')">📋 發文格式</button>
-<button onclick="sendQuickQuestion('取消預約與違約金如何計算？')">💰 退費違約金</button>
-<button onclick="sendQuickQuestion('如何聯繫真人管管或申訴？')">👤 專人客服</button>
-</div>
-<div class="ai-chat-input-area">
-<input id="ai-user-input" placeholder="輸入你想詢問的問題..." type="text"/>
-<button id="ai-send-btn">發送</button>
-</div>
-</div>
+
 <!-- 🌟 核心腳本整合 -->
 <script>
     let isUnlocked = false;
 
-    // 🌟 直接提取自您截圖的 Google Sheet「發布到網路」專屬 CSV 串接端點（100% 穩定、絕不卡死）
-    const PUBLISHED_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQA2wfE0VWKbM4ni_v62ASaOHO1-9_-_KHI09Fqa25SXAJB0_MLfyzHPgwbrnhVeHITSJFTBQ99uJf7/pub?output=csv';
+    // Google 試算表 CSV 解析器與動態渲染
+    const googleSheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQA2wfEOVWKbM4ni_v62ASaOHO1-9-_-KHi09Eqa25SXAJBO_MLfyzHPgwbrnhVeHITSJFTBQ99uJf7/pub?output=csv';
+
+    async function fetchPartners() {
+        const container = document.getElementById('partner-list-container');
+        if (!container) return;
+
+        try {
+            const response = await fetch(googleSheetCsvUrl);
+            if (!response.ok) throw new Error("Network response was not ok");
+            const csvData = await response.text();
+            
+            // 解析 CSV 列
+            const rows = csvData.split('\n').map(row => row.split(','));
+            
+            let html = '';
+            // 跳過第一行（標題行：名字,性別,地區,簡介），從第二行開始迴圈
+            for (let i = 1; i < rows.length; i++) {
+                const [name, gender, region, intro] = rows[i].map(item => item ? item.trim() : '');
+                if (!name) continue; // 如果名字為空則跳過
+
+                html += `
+                    <div class="partner-card">
+                        <div class="partner-top">
+                            <div class="partner-name">👤 ${escapeHtml(name)}</div>
+                            <div class="partner-tags">
+                                <span class="partner-tag tag-gender">${escapeHtml(gender)}</span>
+                                <span class="partner-tag tag-region">${escapeHtml(region)}</span>
+                            </div>
+                        </div>
+                        <div class="partner-intro">${escapeHtml(intro)}</div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html || `<div style="text-align:center; color: var(--text-gray); font-size:12px;">目前尚無成員上架</div>`;
+
+        } catch (error) {
+            container.innerHTML = `<div style="color:var(--neon-pink); font-size:12px; text-align:center; padding:10px;">⚠️ 名單載入失敗，請確認試算表已發布為 CSV 格式。</div>`;
+        }
+    }
 
     function switchTab(tabId) {
         if (tabId === 'rooms' && !isUnlocked) {
@@ -722,98 +673,6 @@
         if (targetSubBtn) targetSubBtn.classList.add('active');
         const targetSubPanel = document.getElementById('sub-panel-' + subTabId);
         if (targetSubPanel) targetSubPanel.classList.add('active');
-    }
-
-    // 🌟 萬無一失的 CSV 解析與載入引擎
-    async function loadPartnersFromSheet() {
-        const container = document.getElementById('partner-grid');
-        if (!container) return;
-
-        try {
-            const response = await fetch(PUBLISHED_CSV_URL);
-            if (!response.ok) throw new Error("無法取得 CSV 資料");
-
-            const csvText = await response.text();
-            const rows = parseCSV(csvText);
-
-            if (!rows || rows.length <= 1) {
-                container.innerHTML = `<div style="color: var(--text-gray); text-align: center; width: 100%;">目前尚未登記任何出租人夥伴。</div>`;
-                return;
-            }
-
-            // 動態搜尋欄位索引（對應「名字」、「性別」、「地區」、「簡介」）
-            const headers = rows[0].map(h => h.trim());
-            const nameIdx = headers.findIndex(h => h.includes('名') || h.includes('社群'));
-            const genderIdx = headers.findIndex(h => h.includes('性'));
-            const regionIdx = headers.findIndex(h => h.includes('區'));
-            const bioIdx = headers.findIndex(h => h.includes('簡') || h.includes('介'));
-
-            container.innerHTML = '';
-
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i];
-                if (!row || row.length === 0) continue;
-
-                const name = (row[nameIdx >= 0 ? nameIdx : 0] || '').trim();
-                const gender = (row[genderIdx >= 0 ? genderIdx : 1] || '').trim();
-                const region = (row[regionIdx >= 0 ? regionIdx : 2] || '').trim();
-                const bio = (row[bioIdx >= 0 ? bioIdx : 3] || '').trim();
-
-                // 跳過完全空白列
-                if (!name) continue;
-
-                const genderClass = (gender === '女' || gender === '♀') ? 'female' : 'male';
-
-                container.innerHTML += `
-                    <div class="partner-card">
-                        <div>
-                            <div class="partner-header-row">
-                                <div class="partner-name">
-                                    👻 ${escapeHtml(name)}
-                                </div>
-                                <span class="partner-gender-badge ${genderClass}">${escapeHtml(gender || '祕密')}</span>
-                            </div>
-                            <div class="partner-region">📍 ${escapeHtml(region || '全台')}</div>
-                            <div class="partner-bio">${escapeHtml(bio || '這位夥伴很神秘，尚未填寫簡介...')}</div>
-                        </div>
-                        <a href="https://line.me/ti/p/L1iM3COUPl" target="_blank" class="partner-btn">聯繫管管預約 ${escapeHtml(name)} ➔</a>
-                    </div>
-                `;
-            }
-
-            if (container.innerHTML.trim() === '') {
-                container.innerHTML = `<div style="color: var(--text-gray); text-align: center; width: 100%;">目前尚未登記任何出租人夥伴。</div>`;
-            }
-
-        } catch (error) {
-            console.error("載入夥伴失敗:", error);
-            container.innerHTML = `<div style="color: var(--neon-pink); text-align: center; width: 100%;">⚠️ 列表載入失敗，請確認已點擊「發布到網路」。</div>`;
-        }
-    }
-
-    // 相容雙引號與換行符號的強化版 CSV 解析器
-    function parseCSV(text) {
-        let p = '', c = '', r = [];
-        let q = false;
-        let row = [''];
-        for (let i = 0; i < text.length; i++) {
-            c = text[i];
-            let next = text[i+1];
-            if (c === '"') {
-                if (q && next === '"') { row[row.length - 1] += '"'; i++; }
-                else { q = !q; }
-            } else if (c === ',' && !q) {
-                row.push('');
-            } else if ((c === '\r' || c === '\n') && !q) {
-                if (c === '\r' && next === '\n') { i++; }
-                r.push(row);
-                row = [''];
-            } else {
-                row[row.length - 1] += c;
-            }
-        }
-        if (row.length > 1 || row[0] !== '') { r.push(row); }
-        return r;
     }
 
     function toggleAIChat() {
@@ -936,8 +795,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // 載入表格資料
-        loadPartnersFromSheet();
+        fetchPartners(); // 網頁載入時自動抓取試算表名單
 
         const floatBtn = document.getElementById('ai-float-btn');
         const closeBtn = document.getElementById('ai-close-btn');

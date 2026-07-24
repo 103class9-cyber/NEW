@@ -408,7 +408,7 @@
 <p class="subtitle">VIP Lounge Portal</p>
 </div>
 
-<!-- 🌟 頂部分頁選單 -->
+<!-- 頂部分頁選單 -->
 <div class="tab-navigation">
 <button class="tab-btn active" onclick="switchTab('home')">主頁</button>
 <button class="tab-btn" onclick="switchTab('rooms')">VIP 招待所</button>
@@ -419,7 +419,7 @@
 <!-- 分頁 1：【主頁】 -->
 <div class="tab-panel active" id="panel-home">
 
-<!-- 🌟【最上方】時光夥伴 / 出租人名單（動態同步自 Google Sheet） -->
+<!-- 🌟【最上方】時光夥伴 / 出租人名單 -->
 <div class="card-box">
 <div class="card-header">👥 時光夥伴 ｜ 出租人名單</div>
 <div class="partner-grid" id="partner-grid">
@@ -674,7 +674,7 @@
 <div class="footer">© 2026 閒人案內所 ｜ 頂級生活陪伴體驗</div>
 </div>
 
-<!-- 🌟 AI 智能客服懸浮視窗 HTML -->
+<!-- AI 智能客服懸浮視窗 HTML -->
 <div id="ai-float-btn">👻</div>
 
 <div id="ai-chat-box">
@@ -705,8 +705,8 @@
 <script>
     let isUnlocked = false;
 
-    // 🌟 請把這個填換成你的 Google Sheet ID 🌟
-    const GOOGLE_SHEET_ID = '1Jb4Q78kcbGZdVTTaDxDGtvW5RNuhGbb9PVAfl3VjzM'; 
+    // 🌟 直接提取自您截圖的 Google Sheet「發布到網路」專屬 CSV 串接端點（100% 穩定、絕不卡死）
+    const PUBLISHED_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQA2wfE0VWKbM4ni_v62ASaOHO1-9_-_KHI09Fqa25SXAJB0_MLfyzHPgwbrnhVeHITSJFTBQ99uJf7/pub?output=csv';
 
     function switchTab(tabId) {
         if (tabId === 'rooms' && !isUnlocked) {
@@ -736,28 +736,43 @@
         if (targetSubPanel) targetSubPanel.classList.add('active');
     }
 
-    // 🌟 從 Google Sheet 自動載入出租人資料
+    // 🌟 萬無一失的 CSV 解析與載入引擎
     async function loadPartnersFromSheet() {
         const container = document.getElementById('partner-grid');
         if (!container) return;
 
         try {
-            const response = await fetch(`https://opensheet.elk.sh/${GOOGLE_SHEET_ID}/1`);
-            if (!response.ok) throw new Error("無法讀取表格");
+            const response = await fetch(PUBLISHED_CSV_URL);
+            if (!response.ok) throw new Error("無法取得 CSV 資料");
 
-            const data = await response.json();
-            container.innerHTML = '';
+            const csvText = await response.text();
+            const rows = parseCSV(csvText);
 
-            if (!data || data.length === 0) {
+            if (!rows || rows.length <= 1) {
                 container.innerHTML = `<div style="color: var(--text-gray); text-align: center; width: 100%;">目前尚未登記任何出租人夥伴。</div>`;
                 return;
             }
 
-            data.forEach(item => {
-                const name = item['名字'] || '暱稱未填';
-                const gender = item['性別'] || '祕密';
-                const region = item['地區'] || '全台';
-                const bio = item['簡介'] || '這位夥伴很神秘，尚未填寫簡介...';
+            // 動態搜尋欄位索引（對應「名字」、「性別」、「地區」、「簡介」）
+            const headers = rows[0].map(h => h.trim());
+            const nameIdx = headers.findIndex(h => h.includes('名') || h.includes('社群'));
+            const genderIdx = headers.findIndex(h => h.includes('性'));
+            const regionIdx = headers.findIndex(h => h.includes('區'));
+            const bioIdx = headers.findIndex(h => h.includes('簡') || h.includes('介'));
+
+            container.innerHTML = '';
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                if (!row || row.length === 0) continue;
+
+                const name = (row[nameIdx >= 0 ? nameIdx : 0] || '').trim();
+                const gender = (row[genderIdx >= 0 ? genderIdx : 1] || '').trim();
+                const region = (row[regionIdx >= 0 ? regionIdx : 2] || '').trim();
+                const bio = (row[bioIdx >= 0 ? bioIdx : 3] || '').trim();
+
+                // 跳過完全空白列
+                if (!name) continue;
 
                 const genderClass = (gender === '女' || gender === '♀') ? 'female' : 'male';
 
@@ -768,20 +783,49 @@
                                 <div class="partner-name">
                                     👻 ${escapeHtml(name)}
                                 </div>
-                                <span class="partner-gender-badge ${genderClass}">${escapeHtml(gender)}</span>
+                                <span class="partner-gender-badge ${genderClass}">${escapeHtml(gender || '祕密')}</span>
                             </div>
-                            <div class="partner-region">📍 ${escapeHtml(region)}</div>
-                            <div class="partner-bio">${escapeHtml(bio)}</div>
+                            <div class="partner-region">📍 ${escapeHtml(region || '全台')}</div>
+                            <div class="partner-bio">${escapeHtml(bio || '這位夥伴很神秘，尚未填寫簡介...')}</div>
                         </div>
                         <a href="https://line.me/ti/p/L1iM3COUPl" target="_blank" class="partner-btn">聯繫管管預約 ${escapeHtml(name)} ➔</a>
                     </div>
                 `;
-            });
+            }
+
+            if (container.innerHTML.trim() === '') {
+                container.innerHTML = `<div style="color: var(--text-gray); text-align: center; width: 100%;">目前尚未登記任何出租人夥伴。</div>`;
+            }
 
         } catch (error) {
             console.error("載入夥伴失敗:", error);
-            container.innerHTML = `<div style="color: var(--neon-pink); text-align: center; width: 100%;">⚠️ 列表載入失敗，請確認已將 Google Sheet「發布到網路」。</div>`;
+            container.innerHTML = `<div style="color: var(--neon-pink); text-align: center; width: 100%;">⚠️ 列表載入失敗，請確認已點擊「發布到網路」。</div>`;
         }
+    }
+
+    // 相容雙引號與換行符號的強化版 CSV 解析器
+    function parseCSV(text) {
+        let p = '', c = '', r = [];
+        let q = false;
+        let row = [''];
+        for (let i = 0; i < text.length; i++) {
+            c = text[i];
+            let next = text[i+1];
+            if (c === '"') {
+                if (q && next === '"') { row[row.length - 1] += '"'; i++; }
+                else { q = !q; }
+            } else if (c === ',' && !q) {
+                row.push('');
+            } else if ((c === '\r' || c === '\n') && !q) {
+                if (c === '\r' && next === '\n') { i++; }
+                r.push(row);
+                row = [''];
+            } else {
+                row[row.length - 1] += c;
+            }
+        }
+        if (row.length > 1 || row[0] !== '') { r.push(row); }
+        return r;
     }
 
     function toggleAIChat() {
@@ -904,6 +948,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        // 載入表格資料
         loadPartnersFromSheet();
 
         const floatBtn = document.getElementById('ai-float-btn');

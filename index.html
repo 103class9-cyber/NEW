@@ -605,29 +605,53 @@
 <script>
     let isUnlocked = false;
 
-    // 🌟 Google 試算表 CSV 動態抓取引擎
+    // 🌟 Google 試算表 CSV 網址
     const googleSheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQA2wfEOVWKbM4ni_v62ASaOHO1-9-_-KHi09Eqa25SXAJBO_MLfyzHPgwbrnhVeHITSJFTBQ99uJf7/pub?output=csv';
 
+    // 🌟 雙軌名單抓取引擎（支援 CORS 自動代理備援）
     async function fetchPartners() {
         const container = document.getElementById('partner-list-container');
         if (!container) return;
 
+        let csvText = '';
+
+        // 【第一軌】直接抓取
         try {
-            // 使用標準 no-cache 避免瀏覽器讀到舊資料
-            const response = await fetch(googleSheetCsvUrl, { cache: 'no-cache' });
-            if (!response.ok) throw new Error(`HTTP 錯誤狀態碼: ${response.status}`);
-            
-            const csvText = await response.text();
-
-            // 防護機制：如果回傳 HTML 網頁，代表右上角「共用」權限尚未開放
-            if (csvText.trim().startsWith('<!DOCTYPE') || csvText.trim().startsWith('<html')) {
-                throw new Error("試算表權限尚未開啟！請至右上角「共用」設為「知道連結的任何人」。");
+            const response = await fetch(googleSheetCsvUrl);
+            if (response.ok) {
+                csvText = await response.text();
             }
+        } catch (e1) {
+            console.warn("直連受限，啟動代理通道...", e1);
+        }
 
+        // 【第二軌】若直連失敗或回傳無效，透過 Proxy 代理通道繞過 CORS 限制
+        if (!csvText || csvText.trim().startsWith('<!DOCTYPE') || csvText.trim().startsWith('<html')) {
+            try {
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(googleSheetCsvUrl)}`;
+                const responseProxy = await fetch(proxyUrl);
+                if (responseProxy.ok) {
+                    csvText = await responseProxy.text();
+                }
+            } catch (e2) {
+                console.error("代理連線失敗:", e2);
+            }
+        }
+
+        // 驗證是否成功取得 CSV 內容
+        if (!csvText || csvText.trim().startsWith('<!DOCTYPE') || csvText.trim().startsWith('<html')) {
+            container.innerHTML = `<div style="color:var(--neon-pink); font-size:12px; text-align:center; padding:10px;">
+                ⚠️ 名單載入失敗！<br>
+                請確認試算表右上角<b>「共用」</b>已設為<b>「知道連結的任何人」</b>
+            </div>`;
+            return;
+        }
+
+        // 渲染 CSV 名單
+        try {
             const rows = parseCSV(csvText);
             let html = '';
 
-            // 跳過第一行標題列（名字, 性別, 地區, 簡介）
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
                 if (!row || row.length < 1 || !row[0]) continue;
@@ -653,17 +677,13 @@
 
             container.innerHTML = html || `<div style="text-align:center; color: var(--text-gray); font-size:12px; padding:10px;">目前尚無成員上架</div>`;
 
-        } catch (error) {
-            console.error("名單載入失敗詳情:", error);
-            container.innerHTML = `<div style="color:var(--neon-pink); font-size:12px; text-align:center; padding:10px;">
-                ⚠️ 名單載入失敗！<br>
-                請確認：1. 右上角<b>「共用」</b>已設為<b>「知道連結的任何人」</b><br>
-                2. <b>「發布到網路」</b>格式選為 <b>CSV</b>
-            </div>`;
+        } catch (parseError) {
+            console.error("CSV 解析錯誤:", parseError);
+            container.innerHTML = `<div style="color:var(--neon-pink); font-size:12px; text-align:center; padding:10px;">⚠️ 資料格式解析異常</div>`;
         }
     }
 
-    // CSV 專用解析器（支援引號與標點符號）
+    // CSV 解析器 (相容引號與逗號)
     function parseCSV(text) {
         const lines = text.split(/\r?\n/);
         const result = [];
@@ -837,7 +857,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetchPartners(); // 自動讀取試算表
+        fetchPartners(); // 啟動雙軌名單抓取
 
         const floatBtn = document.getElementById('ai-float-btn');
         const closeBtn = document.getElementById('ai-close-btn');

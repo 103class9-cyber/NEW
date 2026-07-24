@@ -605,7 +605,7 @@
 <script>
     let isUnlocked = false;
 
-    // 🌟 Google 試算表 CSV 動態抓取引擎（加入防快取機制）
+    // 🌟 Google 試算表 CSV 動態抓取引擎
     const googleSheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQA2wfEOVWKbM4ni_v62ASaOHO1-9-_-KHi09Eqa25SXAJBO_MLfyzHPgwbrnhVeHITSJFTBQ99uJf7/pub?output=csv';
 
     async function fetchPartners() {
@@ -613,13 +613,13 @@
         if (!container) return;
 
         try {
-            // 加上時間戳記 &t=Date.now() 強制抓取最新試算表資料，避免瀏覽器讀取舊快取
-            const response = await fetch(googleSheetCsvUrl + '&t=' + Date.now());
+            // 使用標準 no-cache 避免瀏覽器讀到舊資料
+            const response = await fetch(googleSheetCsvUrl, { cache: 'no-cache' });
             if (!response.ok) throw new Error(`HTTP 錯誤狀態碼: ${response.status}`);
             
             const csvText = await response.text();
 
-            // 檢查是否因為未開啟「知道連結的任何人」共用權限而回傳了 Google 登入 HTML 頁面
+            // 防護機制：如果回傳 HTML 網頁，代表右上角「共用」權限尚未開放
             if (csvText.trim().startsWith('<!DOCTYPE') || csvText.trim().startsWith('<html')) {
                 throw new Error("試算表權限尚未開啟！請至右上角「共用」設為「知道連結的任何人」。");
             }
@@ -654,12 +654,16 @@
             container.innerHTML = html || `<div style="text-align:center; color: var(--text-gray); font-size:12px; padding:10px;">目前尚無成員上架</div>`;
 
         } catch (error) {
-            console.error("名單載入失敗原因:", error);
-            container.innerHTML = `<div style="color:var(--neon-pink); font-size:12px; text-align:center; padding:10px;">⚠️ 名單載入失敗，請確認右上角「共用」已設為「知道連結的任何人」。</div>`;
+            console.error("名單載入失敗詳情:", error);
+            container.innerHTML = `<div style="color:var(--neon-pink); font-size:12px; text-align:center; padding:10px;">
+                ⚠️ 名單載入失敗！<br>
+                請確認：1. 右上角<b>「共用」</b>已設為<b>「知道連結的任何人」</b><br>
+                2. <b>「發布到網路」</b>格式選為 <b>CSV</b>
+            </div>`;
         }
     }
 
-    // 支援試算表中包含標點符號與逗號的 CSV 解析器
+    // CSV 專用解析器（支援引號與標點符號）
     function parseCSV(text) {
         const lines = text.split(/\r?\n/);
         const result = [];
@@ -833,7 +837,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetchPartners(); // 自動抓取試算表名單
+        fetchPartners(); // 自動讀取試算表
 
         const floatBtn = document.getElementById('ai-float-btn');
         const closeBtn = document.getElementById('ai-close-btn');

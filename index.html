@@ -605,7 +605,7 @@
 <script>
     let isUnlocked = false;
 
-    // Google 試算表 CSV 解析器與動態渲染
+    // 🌟 Google 試算表 CSV 動態抓取引擎（加入防快取機制）
     const googleSheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQA2wfEOVWKbM4ni_v62ASaOHO1-9-_-KHi09Eqa25SXAJBO_MLfyzHPgwbrnhVeHITSJFTBQ99uJf7/pub?output=csv';
 
     async function fetchPartners() {
@@ -613,26 +613,37 @@
         if (!container) return;
 
         try {
-            const response = await fetch(googleSheetCsvUrl);
-            if (!response.ok) throw new Error("Network response was not ok");
-            const csvData = await response.text();
+            // 加上時間戳記 &t=Date.now() 強制抓取最新試算表資料，避免瀏覽器讀取舊快取
+            const response = await fetch(googleSheetCsvUrl + '&t=' + Date.now());
+            if (!response.ok) throw new Error(`HTTP 錯誤狀態碼: ${response.status}`);
             
-            // 解析 CSV 列
-            const rows = csvData.split('\n').map(row => row.split(','));
-            
+            const csvText = await response.text();
+
+            // 檢查是否因為未開啟「知道連結的任何人」共用權限而回傳了 Google 登入 HTML 頁面
+            if (csvText.trim().startsWith('<!DOCTYPE') || csvText.trim().startsWith('<html')) {
+                throw new Error("試算表權限尚未開啟！請至右上角「共用」設為「知道連結的任何人」。");
+            }
+
+            const rows = parseCSV(csvText);
             let html = '';
-            // 跳過第一行（標題行：名字,性別,地區,簡介），從第二行開始迴圈
+
+            // 跳過第一行標題列（名字, 性別, 地區, 簡介）
             for (let i = 1; i < rows.length; i++) {
-                const [name, gender, region, intro] = rows[i].map(item => item ? item.trim() : '');
-                if (!name) continue; // 如果名字為空則跳過
+                const row = rows[i];
+                if (!row || row.length < 1 || !row[0]) continue;
+
+                const name = row[0] || '';
+                const gender = row[1] || '';
+                const region = row[2] || '';
+                const intro = row[3] || '';
 
                 html += `
                     <div class="partner-card">
                         <div class="partner-top">
                             <div class="partner-name">👤 ${escapeHtml(name)}</div>
                             <div class="partner-tags">
-                                <span class="partner-tag tag-gender">${escapeHtml(gender)}</span>
-                                <span class="partner-tag tag-region">${escapeHtml(region)}</span>
+                                ${gender ? `<span class="partner-tag tag-gender">${escapeHtml(gender)}</span>` : ''}
+                                ${region ? `<span class="partner-tag tag-region">${escapeHtml(region)}</span>` : ''}
                             </div>
                         </div>
                         <div class="partner-intro">${escapeHtml(intro)}</div>
@@ -640,11 +651,38 @@
                 `;
             }
 
-            container.innerHTML = html || `<div style="text-align:center; color: var(--text-gray); font-size:12px;">目前尚無成員上架</div>`;
+            container.innerHTML = html || `<div style="text-align:center; color: var(--text-gray); font-size:12px; padding:10px;">目前尚無成員上架</div>`;
 
         } catch (error) {
-            container.innerHTML = `<div style="color:var(--neon-pink); font-size:12px; text-align:center; padding:10px;">⚠️ 名單載入失敗，請確認試算表已發布為 CSV 格式。</div>`;
+            console.error("名單載入失敗原因:", error);
+            container.innerHTML = `<div style="color:var(--neon-pink); font-size:12px; text-align:center; padding:10px;">⚠️ 名單載入失敗，請確認右上角「共用」已設為「知道連結的任何人」。</div>`;
         }
+    }
+
+    // 支援試算表中包含標點符號與逗號的 CSV 解析器
+    function parseCSV(text) {
+        const lines = text.split(/\r?\n/);
+        const result = [];
+        for (let line of lines) {
+            if (!line.trim()) continue;
+            const row = [];
+            let insideQuote = false;
+            let entry = '';
+            for (let i = 0; i < line.length; i++) {
+                let char = line[i];
+                if (char === '"') {
+                    insideQuote = !insideQuote;
+                } else if (char === ',' && !insideQuote) {
+                    row.push(entry.replace(/^"|"$/g, '').trim());
+                    entry = '';
+                } else {
+                    entry += char;
+                }
+            }
+            row.push(entry.replace(/^"|"$/g, '').trim());
+            result.push(row);
+        }
+        return result;
     }
 
     function switchTab(tabId) {
@@ -795,7 +833,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetchPartners(); // 網頁載入時自動抓取試算表名單
+        fetchPartners(); // 自動抓取試算表名單
 
         const floatBtn = document.getElementById('ai-float-btn');
         const closeBtn = document.getElementById('ai-close-btn');

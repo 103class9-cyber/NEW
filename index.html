@@ -123,7 +123,6 @@
     .title { font-size: 30px; font-weight: 900; letter-spacing: 5px; margin-bottom: 8px; background: linear-gradient(90deg, #ffffff 10%, var(--neon-gold), var(--neon-orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 15px rgba(255, 115, 36, 0.35)); }
     .subtitle { font-size: 11px; color: var(--text-gray); letter-spacing: 5px; text-transform: uppercase; opacity: 0.75; font-weight: 500; }
 
-    /* 🌟 6格導航（雙行網格） */
     .tab-navigation {
         display: grid; 
         grid-template-columns: repeat(3, 1fr); 
@@ -185,7 +184,6 @@
     .card-header::after { content: ''; flex-grow: 1; height: 1px; background: linear-gradient(to right, rgba(255, 176, 32, 0.35), transparent); }
     .card-header.blue-header::after { background: linear-gradient(to right, rgba(0, 240, 255, 0.35), transparent); }
 
-    /* 🌟 專用卡片樣式：強制左右橫向排列，無底線 */
     .primary-card {
         display: flex !important;
         align-items: center !important;
@@ -239,7 +237,6 @@
     }
     .search-input:focus { border-color: var(--neon-cyan); box-shadow: 0 0 18px rgba(0, 240, 255, 0.4), inset 0 2px 6px rgba(0,0,0,0.5); }
 
-    /* 🌟 2x2 舒適篩選面板 */
     .filter-box {
         display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 22px;
         background: rgba(8, 5, 18, 0.6); padding: 14px; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.06);
@@ -254,7 +251,6 @@
     }
     .filter-item select:focus { border-color: var(--neon-cyan); box-shadow: 0 0 16px rgba(0, 240, 255, 0.3); }
 
-    /* ⭐ 頂級華麗風格：上中下直式高分推薦 (TOP 3) */
     .featured-section { margin-bottom: 24px; }
     .featured-title { 
         font-size: 13px; font-weight: 900; color: var(--neon-gold); margin-bottom: 12px; 

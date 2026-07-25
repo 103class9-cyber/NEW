@@ -504,7 +504,7 @@
 <div class="container">
 <div class="system-badge"><span></span> 系統運行中 ｜ 24H 智慧媒合 (PWA已啟動)</div>
 <div class="marquee-box">
-    <div class="marquee-content">📢 【最新公告】閒人案內所 ｜ 全平台評價資料庫已全面完成同步！✨</div>
+    <div class="marquee-content">📢 【最新公告】閒人案內所 ｜ 全平台評價資料庫與 Google 試算表連動成功！✨</div>
 </div>
 
 <div class="header">
@@ -1176,55 +1176,6 @@
         }
     }
 
-    // 🌟 全網評分與留言送出 (改用跨域穩定 post)
-    function submitRatingWithComment() {
-        if (currentSelectedScore === 0) {
-            showToast("❌ 請先點擊上方選擇星級（1至5星）！");
-            return;
-        }
-        const name = currentActivePartnerName;
-        triggerHaptic(25);
-        const now = Date.now();
-        
-        const localCooldown = JSON.parse(localStorage.getItem('renjian_my_rated_' + name) || '0');
-        const cooldownDays = 14;
-        const cooldownTime = cooldownDays * 24 * 60 * 60 * 1000;
-        if (localCooldown && (now - localCooldown < cooldownTime)) {
-            const daysLeft = Math.ceil((cooldownTime - (now - localCooldown)) / (24 * 60 * 60 * 1000));
-            showRatingPopup(`⏳ 距離上次給予評分未滿 14 天（還需等待 ${daysLeft} 天）。\n為維護社群信譽與評分真實性，同一夥伴暫時無法再次評分喔！`);
-            return;
-        }
-
-        const commentInput = document.getElementById('rating-comment-input');
-        const commentText = commentInput ? commentInput.value.trim() : '';
-
-        // 送出給 Google Apps Script
-        fetch(googleSheetApiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-                action: 'submitReview',
-                partner: name,
-                score: currentSelectedScore,
-                comment: commentText,
-                timestamp: now
-            })
-        }).then(() => {
-            showToast("⭐ 評分成功！資料已寫入試算表");
-            setTimeout(fetchPartners, 1200); // 1.2 秒後重新拉取全網最新資料
-        }).catch(err => {
-            console.error("送出評分失敗:", err);
-        });
-
-        localStorage.setItem('renjian_my_rated_' + name, String(now));
-
-        if (commentInput) commentInput.value = '';
-        currentSelectedScore = 0;
-
-        showRatingPopup(`⭐ 成功給予 ${name} 評價與留言！\n感謝您的真誠回饋。`);
-        closePartnerDetail();
-    }
-
     function renderFeaturedSection() {
         const container = document.getElementById('featured-grid-container');
         if (!container) return;
@@ -1547,7 +1498,6 @@
         return String(regionStr).split(/[,，、/]+/).map(s => s.trim()).filter(Boolean);
     }
 
-    // 🌟 核心：拉取全網最新資料 (防快取 + 格式判讀)
     async function fetchPartners() {
         try {
             const response = await fetch(googleSheetApiUrl + '?t=' + Date.now());
@@ -1555,12 +1505,10 @@
             const data = await response.json();
 
             if (data && typeof data === 'object') {
-                // 1. 同步 ratings 資料
                 if (data.ratings) {
                     userRatings = data.ratings;
                 }
                 
-                // 2. 讀取並覆蓋夥伴陣列
                 const partnersArr = Array.isArray(data) ? data : data.partners;
                 if (partnersArr && Array.isArray(partnersArr) && partnersArr.length > 0) {
                     const filtered = partnersArr.filter((row) => {
@@ -1570,7 +1518,7 @@
                         return true;
                     });
                     if (filtered.length > 0) {
-                        allPartnersData = filtered; // 正確覆蓋為 Google 試算表資料
+                        allPartnersData = filtered;
                     }
                 }
             }
@@ -1772,7 +1720,7 @@
         }
         if (text.includes("線上") || text.includes("全額") || text.includes("預付")) {
             const formatTwo = `🌐 格式二：【線上委託｜全額預付制】\n預約日期：\n預約時間：\n委託金額 (全額)：`;
-            return `${formatTwo}\n\n<button class="copy-code-btn" onclick="copyToClipboard(${JSON.stringify(formatTwo)})">📋 一鍵複製線上委託格式</button>`;
+            return `${formatTwo}\n\n<button class="copy-code-btn" onclick="copyToClipboard(${JSON.stringify(formatTwo)})">📋 一鍵複製線上預付格式</button>`;
         }
         if (text.includes("退費") || text.includes("取消") || text.includes("放鳥") || text.includes("違約金")) {
             return `根據《閒人案內所交付及退費政策》：\n• 約定時間 **7天前** 取消：退還餘額（扣除金流手續費）。\n• 約定時間 **7天內** 臨退/放鳥：沒收總金額 **30% 作為違約金**（10% 撥付夥伴補償，20% 為平台行政費）。👻`;
@@ -1781,7 +1729,7 @@
             return `專人服務請直接點擊以下連結一對一私訊：\n<a class="chat-link-btn" href="https://line.me/ti/p/L1iM3COUPl" target="_blank">👩‍💼 點此私訊【聯絡管管】</a>\n<a class="chat-link-btn" href="https://line.me/ti/p/mR19KggePp" target="_blank">👨‍💼 點此私訊【聯絡所長】</a>`;
         }
         if (text.includes("你好") || text.includes("嗨") || text.includes("hi") || text.includes("hello")) {
-            return `您好！我是閒人案內所的數位風控與客服總監。請問今天有關於預約媒合、發文格式或平台規則的問題想諮詢嗎？✨`;
+            return `您好！我是閒人案內所的數位風控與客服總監。請問還有關於預約媒合、發文格式或平台規則的問題想諮詢嗎？✨`;
         }
         return null;
     }

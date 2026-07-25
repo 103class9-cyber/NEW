@@ -185,7 +185,37 @@
     .card-header::after { content: ''; flex-grow: 1; height: 1px; background: linear-gradient(to right, rgba(255, 176, 32, 0.35), transparent); }
     .card-header.blue-header::after { background: linear-gradient(to right, rgba(0, 240, 255, 0.35), transparent); }
 
-    /* 🌟 標籤膠囊容器修復：強制橫向滾動不換行 */
+    /* 🌟 修正後的專用卡片樣式：強制左右橫向排列，無底線 */
+    .primary-card {
+        display: flex !important;
+        align-items: center !important;
+        flex-direction: row !important;
+        padding: 18px 20px !important;
+        background: linear-gradient(90deg, rgba(0, 240, 255, 0.15) 0%, rgba(18, 12, 35, 0.8) 100%) !important;
+        border: 1px solid var(--neon-blue) !important;
+        border-radius: 20px !important;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        transition: var(--transition-smooth) !important;
+        box-shadow: 0 0 22px rgba(0, 240, 255, 0.16) !important;
+        margin-bottom: 12px !important;
+    }
+    .primary-card * {
+        text-decoration: none !important;
+    }
+    .primary-card:hover {
+        background: linear-gradient(90deg, rgba(0, 240, 255, 0.28) 0%, rgba(179, 102, 255, 0.16) 100%) !important;
+        border-color: #ffffff !important;
+        transform: translateY(-3px) !important;
+        box-shadow: 0 0 35px rgba(0, 240, 255, 0.45) !important;
+    }
+    .primary-icon {
+        font-size: 26px !important;
+        margin-right: 16px !important;
+        flex-shrink: 0 !important;
+        filter: drop-shadow(0 0 10px var(--neon-blue)) !important;
+    }
+
     .tag-pill-container { 
         display: flex; 
         gap: 8px; 
@@ -825,7 +855,7 @@
     </div>
     <div class="policy-item notice-pink" onclick="toggleFaq(this)" style="cursor: pointer;">
         <div class="policy-item-title">❓ Q3: 成就徽章與零負評代表是怎麼來的？ <span class="faq-arrow" style="transition: transform 0.3s ease; display: inline-block;">▼</span></div>
-        <div class="policy-item-desc faq-content" style="display: none; margin-top: 8px;">徽章會根據用戶給予的真實評價單數與平均評分動態解鎖。平均達 4.5 分以上即可獲得「🎯 零負評代表」標章！</div>
+        <div class="policy-item-desc faq-content" style="display: none; margin-top: 8px;">徽章會根據用戶給予的真實評價單數與平均評分動態解鎖。平均達 4.5 分以上即可獲得<span>🎯 零負評代表</span>標章！</div>
     </div>
     <div class="policy-item notice-cyan" onclick="toggleFaq(this)" style="cursor: pointer;">
         <div class="policy-item-title">❓ Q4: 財務拆帳與夥伴實際拿多少？ <span class="faq-arrow" style="transition: transform 0.3s ease; display: inline-block;">▼</span></div>

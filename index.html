@@ -446,7 +446,6 @@
     .tab-panel.active { display: block; animation: fadeIn 0.45s var(--ease-premium) forwards; }
     .sub-tab-panel.active { display: block; animation: fadeInSub 0.35s var(--ease-premium) forwards; }
 
-    /* 🌟 多管道快速聯繫浮動抽屜與 AI 視窗設定 */
     #quick-action-drawer { position: fixed; bottom: 24px; right: 24px; z-index: 9999; }
     #drawer-main-btn { width: 60px; height: 60px; background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 0 30px rgba(0, 240, 255, 0.6); cursor: pointer; border: 1.5px solid rgba(255,255,255,0.5); transition: var(--transition-smooth); }
     #drawer-main-btn:hover { transform: scale(1.12) rotate(6deg); box-shadow: 0 0 40px rgba(0, 240, 255, 0.8); }
@@ -505,7 +504,7 @@
 <div class="container">
 <div class="system-badge"><span></span> 系統運行中 ｜ 24H 智慧媒合 (PWA已啟動)</div>
 <div class="marquee-box">
-    <div class="marquee-content">📢 【最新公告】閒人案內所 ｜ 法律免責、合規場所與防騷擾條款完整更新！✨</div>
+    <div class="marquee-content">📢 【最新公告】閒人案內所 ｜ 全平台評價資料庫已全面完成同步！✨</div>
 </div>
 
 <div class="header">
@@ -518,7 +517,6 @@
     <p class="subtitle">VIP Lounge Portal</p>
 </div>
 
-<!-- 🌟 6格寬敞雙行網格導航選單 -->
 <div class="tab-navigation">
 <button class="tab-btn active" onclick="triggerHaptic(15); switchTab('home');">🏠 主頁</button>
 <button class="tab-btn" onclick="triggerHaptic(15); switchTab('partners');">👥 夥伴</button>
@@ -776,7 +774,6 @@
 <button class="sub-tab-btn" onclick="triggerHaptic(10); switchSubTab('sub-faq');">❓ 常見FAQ</button>
 </div>
 
-<!-- 1. 🌟 優化後的法律免責條款區塊 -->
 <div class="sub-tab-panel active" id="sub-panel-sub-terms">
 <div class="policy-list">
     <div class="policy-item notice-cyan">
@@ -1004,7 +1001,7 @@
     let currentSelectedScore = 0;
     let currentActivePartnerName = '';
     let favorites = JSON.parse(localStorage.getItem('renjian_favorites') || '[]');
-    let userRatings = JSON.parse(localStorage.getItem('renjian_user_ratings') || '{}'); 
+    let userRatings = {}; 
 
     let allPartnersData = [
         ["Chiu", "女", "全台", "個性隨和、健談且富有同理心，想要認真傾聽都可以找我", "", ["遊戲陪玩", "聊天解悶"]],
@@ -1179,6 +1176,7 @@
         }
     }
 
+    // 🌟 全網評分與留言送出 (改用跨域穩定 post)
     function submitRatingWithComment() {
         if (currentSelectedScore === 0) {
             showToast("❌ 請先點擊上方選擇星級（1至5星）！");
@@ -1187,12 +1185,12 @@
         const name = currentActivePartnerName;
         triggerHaptic(25);
         const now = Date.now();
-        const partnerRecord = userRatings[name] || { lastRated: 0, scores: [], comments: [] };
         
+        const localCooldown = JSON.parse(localStorage.getItem('renjian_my_rated_' + name) || '0');
         const cooldownDays = 14;
         const cooldownTime = cooldownDays * 24 * 60 * 60 * 1000;
-        if (partnerRecord.lastRated && (now - partnerRecord.lastRated < cooldownTime)) {
-            const daysLeft = Math.ceil((cooldownTime - (now - partnerRecord.lastRated)) / (24 * 60 * 60 * 1000));
+        if (localCooldown && (now - localCooldown < cooldownTime)) {
+            const daysLeft = Math.ceil((cooldownTime - (now - localCooldown)) / (24 * 60 * 60 * 1000));
             showRatingPopup(`⏳ 距離上次給予評分未滿 14 天（還需等待 ${daysLeft} 天）。\n為維護社群信譽與評分真實性，同一夥伴暫時無法再次評分喔！`);
             return;
         }
@@ -1200,30 +1198,31 @@
         const commentInput = document.getElementById('rating-comment-input');
         const commentText = commentInput ? commentInput.value.trim() : '';
 
-        partnerRecord.scores.push(currentSelectedScore);
-        if (commentText) {
-            partnerRecord.comments.push(commentText);
-        }
-        partnerRecord.lastRated = now;
-        userRatings[name] = partnerRecord;
-        localStorage.setItem('renjian_user_ratings', JSON.stringify(userRatings));
+        // 送出給 Google Apps Script
+        fetch(googleSheetApiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+                action: 'submitReview',
+                partner: name,
+                score: currentSelectedScore,
+                comment: commentText,
+                timestamp: now
+            })
+        }).then(() => {
+            showToast("⭐ 評分成功！資料已寫入試算表");
+            setTimeout(fetchPartners, 1200); // 1.2 秒後重新拉取全網最新資料
+        }).catch(err => {
+            console.error("送出評分失敗:", err);
+        });
+
+        localStorage.setItem('renjian_my_rated_' + name, String(now));
 
         if (commentInput) commentInput.value = '';
         currentSelectedScore = 0;
 
-        showRatingPopup(`⭐ 成功給予 ${name} 評價與留言！\n感謝您的真誠回饋。為保障社群公正性，14 天內暫時無法再次評分。`);
-        
-        try {
-            fetch(googleSheetApiUrl, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'submitReview', partner: name, score: currentSelectedScore, comment: commentText, timestamp: now })
-            }).catch(() => {});
-        } catch(e) {}
-
-        renderFeaturedSection();
-        openPartnerDetail(name);
+        showRatingPopup(`⭐ 成功給予 ${name} 評價與留言！\n感謝您的真誠回饋。`);
+        closePartnerDetail();
     }
 
     function renderFeaturedSection() {
@@ -1548,21 +1547,31 @@
         return String(regionStr).split(/[,，、/]+/).map(s => s.trim()).filter(Boolean);
     }
 
+    // 🌟 核心：拉取全網最新資料 (防快取 + 格式判讀)
     async function fetchPartners() {
         try {
-            const response = await fetch(googleSheetApiUrl);
+            const response = await fetch(googleSheetApiUrl + '?t=' + Date.now());
             if (!response.ok) throw new Error("API Network response was not ok");
             const data = await response.json();
 
-            if (data && Array.isArray(data) && data.length > 0) {
-                const filtered = data.filter((row) => {
-                    if (!row || !row[0]) return false;
-                    const nameStr = String(row[0]).trim();
-                    if (nameStr === "名字" || nameStr.toLowerCase() === "name") return false;
-                    return true;
-                });
-                if (filtered.length > 0) {
-                    allPartnersData = filtered;
+            if (data && typeof data === 'object') {
+                // 1. 同步 ratings 資料
+                if (data.ratings) {
+                    userRatings = data.ratings;
+                }
+                
+                // 2. 讀取並覆蓋夥伴陣列
+                const partnersArr = Array.isArray(data) ? data : data.partners;
+                if (partnersArr && Array.isArray(partnersArr) && partnersArr.length > 0) {
+                    const filtered = partnersArr.filter((row) => {
+                        if (!row || !row[0]) return false;
+                        const nameStr = String(row[0]).trim();
+                        if (nameStr === "名字" || nameStr.toLowerCase() === "name") return false;
+                        return true;
+                    });
+                    if (filtered.length > 0) {
+                        allPartnersData = filtered; // 正確覆蓋為 Google 試算表資料
+                    }
                 }
             }
         } catch (error) {

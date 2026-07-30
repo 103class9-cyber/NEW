@@ -522,7 +522,7 @@
 <div class="tab-navigation">
 <button class="tab-btn active" onclick="triggerHaptic(15); switchTab('home');">🏠 主頁</button>
 <button class="tab-btn" onclick="triggerHaptic(15); switchTab('partners');">👥 夥伴</button>
-<button class="tab-btn" onclick="triggerHaptic(15); switchTab('clients');">👤 求租人</button>
+<button class="tab-btn" onclick="triggerHaptic(15); switchTab('clients');">👤 委託人</button>
 <button class="tab-btn" onclick="triggerHaptic(15); switchTab('history');">📂 足跡</button>
 <button class="tab-btn" onclick="triggerHaptic(15); switchTab('tools');">🛠️ 工具</button>
 <button class="tab-btn" onclick="triggerHaptic(15); switchTab('rooms');">📞 招待</button>
@@ -542,7 +542,7 @@
 <a class="link-card match-card" href="https://line.me/ti/g2/AyLxcfZMsmv-vg788A1BGUDK3RQ1wvcVawmzEw?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" onclick="triggerHaptic(15)">
 <div class="link-icon">🤝</div>
 <div class="link-content">
-<div class="link-title">求租．出租媒合</div>
+<div class="link-title">委託．出租媒合</div>
 <div class="link-desc">尋找陪伴服務，或上架出租您的時間</div>
 </div>
 </a>
@@ -633,18 +633,18 @@
 </div>
 </div>
 
-<!-- 模組 2.2：【求租人專區】（已修正性別 ➔ 地區 ➔ 名稱選單完美連動） -->
+<!-- 模組 2.2：【委託人專區】 -->
 <div class="tab-panel" id="panel-clients">
 <div class="card-box">
-    <div class="card-header" style="color: var(--neon-cyan);">👤 求租人專區 ｜ 信譽與評價榜</div>
+    <div class="card-header" style="color: var(--neon-cyan);">👤 委託人專區 ｜ 信譽與評價榜</div>
 
     <div class="featured-section">
-        <div class="featured-title">👑 求租貴賓總排行 (TOP 3)</div>
+        <div class="featured-title">👑 委託貴賓總排行 (TOP 3)</div>
         <div class="featured-grid" id="client-featured-grid-container"></div>
     </div>
 
     <div class="search-box-wrapper">
-        <input type="text" id="client-filter-keyword" class="search-input" placeholder="🔍 搜尋求租需求（例如：展覽, 遊戲, 外拍...）" oninput="applyClientFilters()">
+        <input type="text" id="client-filter-keyword" class="search-input" placeholder="🔍 搜尋委託需求（例如：展覽, 遊戲, 外拍...）" oninput="applyClientFilters()">
     </div>
 
     <div class="filter-box">
@@ -669,7 +669,7 @@
         </div>
     </div>
 
-    <div style="font-size: 12px; color: var(--text-gray); margin-bottom: 18px;">點擊求租人卡片可查看詳細需求並給予真實信用評價：</div>
+    <div style="font-size: 12px; color: var(--text-gray); margin-bottom: 18px;">點擊委託人卡片可查看詳細需求並給予真實信用評價：</div>
     <div class="partner-grid" id="client-list-container"></div>
 </div>
 </div>
@@ -798,7 +798,7 @@
 
 <div style="font-size: 13px; font-weight: 800; color: var(--neon-gold); margin-bottom: 14px; letter-spacing: 0.5px;">📊 標準預約媒合作業與對帳 SOP</div>
 <div class="workflow-steps">
-    <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">挑選心儀對象</div><div class="step-desc">至「夥伴」或「求租人」專區挑選合適對象，點擊預約按鈕。</div></div></div>
+    <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">挑選心儀對象</div><div class="step-desc">至「夥伴」或「委託人」專區挑選合適對象，點擊預約按鈕。</div></div></div>
     <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">選擇委託格式</div><div class="step-desc">確認預約日期、時間與總金額，並選擇委託付款方式。</div></div></div>
     <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">支付定金並保留截圖</div><div class="step-desc">透過 TWQR / 街口支付轉帳 30% 定金，<strong>雙方（特別是出租人）必須妥善保留轉帳成功畫面與匯款明細截圖</strong>以供查核。</div></div></div>
     <div class="step-item"><div class="step-num">4</div><div class="step-content"><div class="step-title">官方審核與檔期保留</div><div class="step-desc">核實明細截圖後，小管家將發布預約成功通知並為雙方保留檔期。</div></div></div>
@@ -807,7 +807,7 @@
 
 <div class="sub-tab-navigation">
 <button class="sub-tab-btn active" onclick="triggerHaptic(10); switchSubTab('sub-terms');">📋 免責聲明</button>
-<button class="sub-tab-btn" onclick="triggerHaptic(10); switchSubTab('sub-client');">👤 求租規範</button>
+<button class="sub-tab-btn" onclick="triggerHaptic(10); switchSubTab('sub-client');">👤 委託規範</button>
 <button class="sub-tab-btn" onclick="triggerHaptic(10); switchSubTab('sub-partner');">👥 出租規範</button>
 <button class="sub-tab-btn" onclick="triggerHaptic(10); switchSubTab('sub-policy');">💳 退費政策</button>
 </div>
@@ -838,7 +838,7 @@
 </div>
 </div>
 
-<!-- 2. 求租人權益與規範 -->
+<!-- 2. 委託規範 -->
 <div class="sub-tab-panel" id="sub-panel-sub-client">
 <div class="policy-list">
     <div class="policy-item notice-blue">
@@ -849,21 +849,21 @@
         </div>
     </div>
     <div class="policy-item notice-pink">
-        <div class="policy-item-title">❌ 求租人臨退與放鳥違約罰則</div>
+        <div class="policy-item-title">❌ 委託人臨退與放鳥違約罰則</div>
         <div class="policy-item-desc">
-            求租人若於服務約定時間 <strong>7 天內</strong>無故取消、臨退或放鳥，系統將依法扣除總金額之 <strong>30% 作為違約金</strong>（其中 20% 為平台行政手續費，10% 作為時間補償撥付予受影響之夥伴）。
+            委託人若於服務約定時間 <strong>7 天內</strong>無故取消、臨退或放鳥，系統將依法扣除總金額之 <strong>30% 作為違約金</strong>（其中 20% 為平台行政手續費，10% 作為時間補償撥付予受影響之夥伴）。
         </div>
     </div>
     <div class="policy-item notice-cyan">
         <div class="policy-item-title">🔥 夥伴爽約之消費者權益保障</div>
         <div class="policy-item-desc">
-            若時光夥伴因故未能依約出席且未提前協調，經查證屬實，求租人將獲得 <strong>100% 定金全額無條件退還</strong>，且該夥伴將直接列入平台永久黑名單。
+            若時光夥伴因故未能依約出席且未提前協調，經查證屬實，委託人將獲得 <strong>100% 定金全額無條件退還</strong>，且該夥伴將直接列入平台永久黑名單。
         </div>
     </div>
 </div>
 </div>
 
-<!-- 3. 出租人（時光夥伴）規範與匯款明細要求 -->
+<!-- 3. 出租規範與匯款明細要求 -->
 <div class="sub-tab-panel" id="sub-panel-sub-partner">
 <div class="policy-list">
     <div class="policy-item notice-cyan">
@@ -1005,10 +1005,10 @@
         </div>
     </div>
     <div class="ai-chat-messages" id="ai-messages">
-        <div class="ai-msg bot">您好，我是閒人案內所的數位風控與客服總監。請問有關於預約媒合、求租人排行或平台規則的問題想諮詢嗎？✨</div>
+        <div class="ai-msg bot">您好，我是閒人案內所的數位風控與客服總監。請問有關於預約媒合、委託人排行或平台規則的問題想諮詢嗎？✨</div>
     </div>
     <div class="ai-quick-chips">
-        <button onclick="sendQuickQuestion('請問求租或出租的發文格式？')">📋 發文格式</button>
+        <button onclick="sendQuickQuestion('請問委託或出租的發文格式？')">📋 發文格式</button>
         <button onclick="sendQuickQuestion('線下委託格式是什麼？')">💳 線下定金格式</button>
         <button onclick="sendQuickQuestion('線上委託格式是什麼？')">🌐 線上預付格式</button>
         <button onclick="sendQuickQuestion('取消預約與違約金如何計算？')">💰 退費違約金</button>
@@ -1193,10 +1193,10 @@
         const idx = clientFavorites.indexOf(name);
         if (idx > -1) {
             clientFavorites.splice(idx, 1);
-            showToast(`⭐ 已將求租人 ${name} 移出口袋名單`);
+            showToast(`⭐ 已將委託人 ${name} 移出口袋名單`);
         } else {
             clientFavorites.push(name);
-            showToast(`⭐ 已將求租人 ${name} 加入口袋名單！`);
+            showToast(`⭐ 已將委託人 ${name} 加入口袋名單！`);
         }
         localStorage.setItem('renjian_client_favorites', JSON.stringify(clientFavorites));
         renderClientsSection();
@@ -1431,23 +1431,22 @@
                     <div class="partner-tags">
                         <span class="partner-tag tag-gender">${escapeHtml(gender)}</span>
                         <span class="partner-tag tag-region">${escapeHtml(region)}</span>
-                        <span class="partner-tag tag-badge">👤 求租貴賓</span>
+                        <span class="partner-tag tag-badge">👤 委託貴賓</span>
                     </div>
                     <div class="partner-intro">${intro}</div>
                     <div class="card-action-bar" onclick="event.stopPropagation()">
                         <div class="card-btn-group">
                             <button class="card-fav-btn" onclick="toggleClientFavorite('${escapeHtml(String(name))}', event)">${isFav ? '❤️ 已收藏' : '🤍 收藏'}</button>
                         </div>
-                        <button class="card-copy-btn" onclick="openBookingModal('${escapeHtml(String(name))}', '${escapeHtml(String(region))}')">📋 聯繫求租人</button>
+                        <button class="card-copy-btn" onclick="openBookingModal('${escapeHtml(String(name))}', '${escapeHtml(String(region))}')">📋 聯繫委託人</button>
                     </div>
                 </div>
             `;
         });
-        container.innerHTML = html || `<div style="text-align:center; color: var(--text-gray); font-size:12.5px; padding:20px;">沒有符合條件的求租人</div>`;
+        container.innerHTML = html || `<div style="text-align:center; color: var(--text-gray); font-size:12.5px; padding:20px;">沒有符合條件的委託人</div>`;
         renderClientFeaturedSection();
     }
 
-    // 💡 完美修復後的求租人選單聯動邏輯 (性別 ➔ 地區 ➔ 名稱)
     function populateClientGenderOptions() {
         const gSelect = document.getElementById('client-filter-gender');
         if (!gSelect) return;
@@ -1526,7 +1525,7 @@
     function renderHistoryTab() {
         const favContainer = document.getElementById('history-favorites-container');
         if (favContainer) {
-            let combinedFavs = [...favorites, ...clientFavorites.map(c => c + ' (求租)')];
+            let combinedFavs = [...favorites, ...clientFavorites.map(c => c + ' (委託)')];
             if (combinedFavs.length === 0) {
                 favContainer.innerHTML = `<div style="font-size: 11.5px; color: var(--text-gray);">目前尚無收藏的對象。</div>`;
             } else {
@@ -1596,7 +1595,7 @@
 
         const gender = targetData[1], region = targetData[2], intro = targetData[3];
 
-        document.getElementById('sheet-name').innerText = (type === 'partner') ? `👤 夥伴：${name}` : `👤 求租人：${name}`;
+        document.getElementById('sheet-name').innerText = (type === 'partner') ? `👤 夥伴：${name}` : `👤 委託人：${name}`;
         
         const record = (type === 'partner') ? (userRatings[name] || { scores: [], comments: [] }) : (clientRatings[name] || { scores: [], comments: [] });
         let avg = 0.0, count = 0;
@@ -1607,7 +1606,7 @@
         document.getElementById('sheet-rating').innerText = count > 0 ? `⭐ ${avg.toFixed(1)} (${count}則)` : `⭐ 0.0 (0則)`;
         document.getElementById('sheet-intro').innerText = intro || '暫無詳細介紹';
         
-        let badgesHtml = (type === 'partner') ? `<span style="font-size:10px; background:rgba(255,176,32,0.15); color:var(--neon-gold); border:1px solid rgba(255,176,32,0.4); padding:3px 8px; border-radius:8px;">🌟 時光先鋒</span>` : `<span style="font-size:10px; background:rgba(0,240,255,0.15); color:var(--neon-cyan); border:1px solid rgba(0,240,255,0.4); padding:3px 8px; border-radius:8px;">💎 求租貴賓</span>`;
+        let badgesHtml = (type === 'partner') ? `<span style="font-size:10px; background:rgba(255,176,32,0.15); color:var(--neon-gold); border:1px solid rgba(255,176,32,0.4); padding:3px 8px; border-radius:8px;">🌟 時光先鋒</span>` : `<span style="font-size:10px; background:rgba(0,240,255,0.15); color:var(--neon-cyan); border:1px solid rgba(0,240,255,0.4); padding:3px 8px; border-radius:8px;">💎 委託貴賓</span>`;
         if (count > 0 && avg >= 4.5) {
             badgesHtml += `<span style="font-size:10px; background:rgba(179,102,255,0.15); color:#d8b4fe; border:1px solid rgba(179,102,255,0.4); padding:3px 8px; border-radius:8px;">🎯 零負評代表</span>`;
         }
@@ -1619,8 +1618,8 @@
         });
         document.getElementById('sheet-tags').innerHTML = tagsHtml;
         
-        document.getElementById('rating-section-title').innerText = (type === 'partner') ? "⭐ 給予夥伴評分與留言：" : "⭐ 給予求租人評價與留言：";
-        document.getElementById('comments-list-title').innerText = (type === 'partner') ? "💬 用戶真實評價留言：" : "💬 求租人真實評價紀錄：";
+        document.getElementById('rating-section-title').innerText = (type === 'partner') ? "⭐ 給予夥伴評分與留言：" : "⭐ 給予委託人評價與留言：";
+        document.getElementById('comments-list-title').innerText = (type === 'partner') ? "💬 用戶真實評價留言：" : "💬 委託人真實評價紀錄：";
 
         const ratingActionArea = document.getElementById('rating-action-area');
         let starsHtml = '';

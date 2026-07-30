@@ -633,7 +633,7 @@
 </div>
 </div>
 
-<!-- 模組 2.2：【求租人專區】 -->
+<!-- 模組 2.2：【求租人專區】（已修正性別 ➔ 地區 ➔ 名稱選單完美連動） -->
 <div class="tab-panel" id="panel-clients">
 <div class="card-box">
     <div class="card-header" style="color: var(--neon-cyan);">👤 求租人專區 ｜ 信譽與評價榜</div>
@@ -787,7 +787,7 @@
 </div>
 </div>
 
-<!-- 模組 5：【營運公告】（具備完整說明、匯款明細截圖與法律防護） -->
+<!-- 模組 5：【營運公告】 -->
 <div class="tab-panel" id="panel-notice">
 <div class="card-box">
 <div class="card-header">📢 NOTICE ｜ 平台完整營運與法律合規指南</div>
@@ -903,7 +903,7 @@
     <div class="policy-item notice-pink">
         <div class="policy-item-title">🔐 個人資料保護、言論規範與管轄法院</div>
         <div class="policy-item-desc">
-            • <strong>個資保護：</strong>本平台依據《個人資料保護法》妥善保護用戶之電話, 姓名等隱私數據，絕不外洩給第三方。<br/>
+            • <strong>個資保護：</strong>本平台依據《個人資料保護法》妥善保護用戶之電話、姓名等隱私數據，絕不外洩給第三方。<br/>
             • <strong>評價守則：</strong>雙方於評價系統中之留言須客觀真實，嚴禁公然侮辱或惡意毀謗。若衍生任何法律訴訟，雙方合意以台灣<strong>地方法院為第一審管轄法院</strong>。
         </div>
     </div>
@@ -1447,24 +1447,47 @@
         renderClientFeaturedSection();
     }
 
-    function populateClientFilters() {
+    // 💡 完美修復後的求租人選單聯動邏輯 (性別 ➔ 地區 ➔ 名稱)
+    function populateClientGenderOptions() {
         const gSelect = document.getElementById('client-filter-gender');
-        const rSelect = document.getElementById('client-filter-region');
-        const nSelect = document.getElementById('client-filter-name');
-        if (!gSelect || !rSelect || !nSelect) return;
-
+        if (!gSelect) return;
         const genders = [...new Set(allClientsData.map(c => c[1]).filter(Boolean))];
         gSelect.innerHTML = '<option value="">請選擇</option>' + genders.map(g => `<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join('');
+    }
 
-        const regions = [...new Set(allClientsData.map(c => c[2]).filter(Boolean))];
+    function populateClientRegionOptions() {
+        const genderVal = document.getElementById('client-filter-gender')?.value || '';
+        const rSelect = document.getElementById('client-filter-region');
+        if (!rSelect) return;
+        let filtered = genderVal ? allClientsData.filter(c => c[1] === genderVal) : allClientsData;
+        const regions = [...new Set(filtered.map(c => c[2]).filter(Boolean))];
         rSelect.innerHTML = '<option value="">請選擇</option>' + regions.map(r => `<option value="${escapeHtml(r)}">${escapeHtml(r)}</option>`).join('');
+    }
 
-        const names = [...new Set(allClientsData.map(c => c[0]).filter(Boolean))];
+    function populateClientNameOptions() {
+        const genderVal = document.getElementById('client-filter-gender')?.value || '';
+        const regionVal = document.getElementById('client-filter-region')?.value || '';
+        const nSelect = document.getElementById('client-filter-name');
+        if (!nSelect) return;
+
+        let filtered = allClientsData;
+        if (genderVal) filtered = filtered.filter(c => c[1] === genderVal);
+        if (regionVal) filtered = filtered.filter(c => c[2].includes(regionVal));
+
+        const names = [...new Set(filtered.map(c => c[0]).filter(Boolean))];
         nSelect.innerHTML = '<option value="">請選擇</option>' + names.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
     }
 
-    function onClientGenderChange() { applyClientFilters(); }
-    function onClientRegionChange() { applyClientFilters(); }
+    function onClientGenderChange() {
+        populateClientRegionOptions();
+        populateClientNameOptions();
+        applyClientFilters();
+    }
+
+    function onClientRegionChange() {
+        populateClientNameOptions();
+        applyClientFilters();
+    }
 
     function applyClientFilters() {
         const genderVal = document.getElementById('client-filter-gender')?.value || '';
@@ -1494,7 +1517,9 @@
     }
 
     function renderClientsSection() {
-        populateClientFilters();
+        populateClientGenderOptions();
+        populateClientRegionOptions();
+        populateClientNameOptions();
         applyClientFilters();
     }
 
